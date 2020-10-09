@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
 )
 
