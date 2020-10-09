@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"encoding/csv"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -13,9 +14,16 @@ import (
 	"google.golang.org/grpc"
 )
 
+type Retail struct {
+	id       string
+	producto string
+	valor    int
+	tienda   string
+	destino  string
+}
+
 const (
-	address       = "localhost:50051"
-	defaultPacket = "SA5698PO,Televisor,110,tienda-C,casa-C"
+	address = "localhost:50051"
 )
 
 func main() {
@@ -63,8 +71,9 @@ func main() {
 		}
 		rawData = append(rawData, c)
 	}
+	fmt.Println(rawData)
 	for i := 0; i < len(rawData); i++ {
-		packet = rawData[i]
+		packet := rawData[i].id
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
