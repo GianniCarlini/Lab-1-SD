@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/csv"
-	"fmt"
+
 	"io"
 	"log"
 	"os"
@@ -17,7 +17,7 @@ import (
 type Retail struct {
 	id       string
 	producto string
-	valor    int
+	valor    int64
 	tienda   string
 	destino  string
 }
@@ -62,7 +62,7 @@ func main() {
 			destino:  record[4],
 		}
 		if record[2] != "" {
-			i, err := strconv.Atoi(record[2])
+			i, err := strconv.ParseInt(record[2], 10, 64)
 			if err != nil {
 				log.Printf("Intentando procesar la edad: %v", err)
 				continue
@@ -71,13 +71,18 @@ func main() {
 		}
 		rawData = append(rawData, c)
 	}
-	fmt.Println(rawData)
+
 	for i := 0; i < len(rawData); i++ {
-		packet := rawData[i].id
+		id := rawData[i].id
+		producto := rawData[i].producto
+		valor := rawData[i].valor
+		tienda := rawData[i].tienda
+		destino := rawData[i].destino
+
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		r, err := c.SendPacket(ctx, &pb.PacketRequest{Packet: packet})
+		r, err := c.SendPacket(ctx, &pb.PacketRequest{Id: id, Producto: producto, Valor: valor, Tienda: tienda, Destino: destino}) 
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}

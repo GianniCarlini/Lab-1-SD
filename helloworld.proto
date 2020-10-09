@@ -10,7 +10,12 @@ service Packet {
 
 // The request message containing the user's name.
 message PacketRequest {
-  string packet = 1;
+  string id = 1;
+  string producto = 2;
+  int64 valor = 3;
+  string tienda = 4;
+  string destino = 5;
+
 }
 
 // The response message containing the greetings
