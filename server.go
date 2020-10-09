@@ -19,7 +19,7 @@ type server struct {
 
 // SayHello implements helloworld.GreeterServer
 func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.PacketReply, error) {
-	log.Printf("%v", in.GetPacket())
+	log.Printf("Peticion: %v", in.GetPacket())
 	return &pb.PacketReply{Message: "Su packete es:" + in.GetPacket()}, nil
 }
 
