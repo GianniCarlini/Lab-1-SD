@@ -6,7 +6,7 @@ import (
 	"net"
 	"strconv"
 	"time"
-	"fmt"
+	//"fmt"
 
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
@@ -30,8 +30,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	t := time.Now().Format(time.ANSIC)
 	registro := [8]string{t, in.GetId(), "tipo", in.GetProducto(), Value, in.GetTienda(), in.GetDestino(), seg}
 	registros = append(registros, registro)
-	fmt.Println(registro)
-	return &pb.PacketReply{Message: "El paquete " + in.GetId()+ " se recibio correctamente con id de seguimiento: "+ seg}, nil
+	return &pb.PacketReply{Message: "El paquete " + in.GetId()+" de tipo: "+ in.GetTipo()+ " se recibio correctamente con id de seguimiento: "+ seg}, nil
 }
 
 func main() {

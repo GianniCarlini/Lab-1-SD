@@ -15,7 +15,7 @@ message PacketRequest {
   int64 valor = 3;
   string tienda = 4;
   string destino = 5;
-
+  string tipo = 6;
 }
 
 // The response message containing the greetings
