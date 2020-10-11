@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"encoding/csv"
-
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -33,8 +33,11 @@ type Pymes struct {
 const (
 	address = "localhost:50051"
 )
+var nseguimiento map[string]int64
 
 func main() {
+	nseguimiento = make(map[string]int64) //variable que contiene el id del producto y su respectivo id de seguimiento
+
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -96,7 +99,10 @@ func main() {
 			log.Fatalf("could not greet: %v", err)
 		}
 		log.Printf("%s", r.GetMessage())
+		log.Printf("%s", r.GetNseg())
+		nseguimiento[r.GetMessage()] = r.GetNseg() //agregando key:id,value:seguimiento
 	}
+	fmt.Println(nseguimiento)
  //------------------------- Lectura archivo Pymes --------------------------------------------
 	file2, err := os.Open("csv/pymes.csv")
 	if err != nil {
@@ -164,5 +170,7 @@ func main() {
 			log.Fatalf("could not greet: %v", err)
 		}
 		log.Printf("%s", r.GetMessage())
+		log.Printf("%s", r.GetNseg())
+		nseguimiento[r.GetMessage()] = r.GetNseg() //agregando key:id,value:seguimiento
 	}
 }

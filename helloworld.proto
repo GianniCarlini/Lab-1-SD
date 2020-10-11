@@ -21,4 +21,5 @@ message PacketRequest {
 // The response message containing the greetings
 message PacketReply {
   string message = 1;
+  int64 nseg = 2;
 }
