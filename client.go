@@ -36,6 +36,10 @@ const (
 var nseguimiento map[string]int64
 
 func main() {
+	sleeptime, err := strconv.Atoi(os.Args[1])
+	if err == nil {
+		log.Printf("%v", err)
+	}
 	nseguimiento = make(map[string]int64) //variable que contiene el id del producto y su respectivo id de seguimiento
 
 	// Set up a connection to the server.
@@ -95,6 +99,11 @@ func main() {
 		defer cancel()
 
 		r, err := c.SendPacket(ctx, &pb.PacketRequest{Id: id, Producto: producto, Valor: valor, Tienda: tienda, Destino: destino, Tipo: tipo}) 
+
+		//tiempo de espera entre solicitudes
+		time.Sleep(time.Duration(sleeptime) * time.Second)
+
+
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
@@ -166,6 +175,10 @@ func main() {
 		defer cancel()
 
 		r, err := c.SendPacket(ctx, &pb.PacketRequest{Id: id, Producto: producto, Valor: valor, Tienda: tienda, Destino: destino, Tipo: tipo}) 
+
+		//tiempo de espera entre solicitudes
+		time.Sleep(time.Duration(sleeptime) * time.Second)
+
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}

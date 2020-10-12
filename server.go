@@ -6,7 +6,7 @@ import (
 	"net"
 	"strconv"
 	"time"
-	//"fmt"
+	"fmt"
 	//"io/ioutil"
 	"os"
 	"encoding/csv"
@@ -28,6 +28,18 @@ var seguimiento3 int64 = 0// variable para el codigo de seguimieto
 var registros2 [][]string
 
 
+type PaqueteCola struct{
+	id_paquete string
+	seguimiento int64
+	tipo string
+	valor int64
+	intentos int64
+	estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
+}
+
+var colaretail[] PaqueteCola
+var colaprioritario[] PaqueteCola
+var colanormal[] PaqueteCola
 
 func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.PacketReply, error) {
 	log.Printf("Peticion: %v, Producto: %v", in.GetId(), in.GetProducto())
@@ -59,11 +71,34 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
     strWrite := registros2
     csvWriter.WriteAll(strWrite)
 	csvWriter.Flush()
+  //---------------------------------------------colas----------------------------------
+	reg := PaqueteCola{
+		id_paquete : in.GetId(),
+		seguimiento : seguimiento3,
+		tipo : in.GetTipo(),
+		valor : in.GetValor(),
+		intentos : 0,
+		estado : 0,
+	}
+
+	if in.GetTipo() == normal {
+		colanormal= append(colanormal,reg)
+	}else if in.GetTipo() == prioritario{
+		colaprioritario= append(colaprioritario,reg)
+	}else{
+		colaretail= append(colaretail,reg)
+	}
+	fmt.Println(colanormal)
+	fmt.Println(colaprioritario)
+	fmt.Println(colaretail)
   //-----------------------------------escribiendo registro-----------------------------
 
 	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil
 }
-
+func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
+	log.Printf("Received: %v", in.GetName())
+	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+}
 
 func main() {
 	lis, err := net.Listen("tcp", port)
