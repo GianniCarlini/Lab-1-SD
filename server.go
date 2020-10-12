@@ -22,16 +22,27 @@ const (
 // server is used to implement helloworld.GreeterServer.
 type server struct {
 }
-var seguimiento = 0 // variable para el codigo de seguimieto
+var seguimiento int64 = 0
+var seguimiento2 int64 = 0 
+var seguimiento3 int64 = 0// variable para el codigo de seguimieto
 var registros2 [][]string
 
 
 
 func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.PacketReply, error) {
 	log.Printf("Peticion: %v, Producto: %v", in.GetId(), in.GetProducto())
-	seguimiento += 1
-	seguimiento64 := int64(seguimiento)
-	seg := strconv.Itoa(seguimiento)
+	normal := "normal"
+	prioritario := "prioritario"
+	if in.GetTipo() == normal {
+		seguimiento += 1
+		seguimiento3 = seguimiento
+	}else if in.GetTipo() == prioritario{
+		seguimiento += 1
+		seguimiento3 = seguimiento
+	}else{
+		seguimiento3 = seguimiento2
+	}
+	seg := strconv.Itoa(int(seguimiento3))
 	Value := strconv.FormatInt(in.GetValor(), 10)
 	t := time.Now().Format(time.ANSIC)
 	var registros []string
@@ -49,7 +60,8 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
     csvWriter.WriteAll(strWrite)
 	csvWriter.Flush()
   //-----------------------------------escribiendo registro-----------------------------
-	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento64,}, nil
+
+	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil
 }
 
 
