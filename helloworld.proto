@@ -6,7 +6,7 @@ package helloworld;
 service Packet {
   // Sends a greeting
   rpc SendPacket (PacketRequest) returns (PacketReply) {}
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc Camion (stream CamionRequest) returns (stream CamionReply) {}
 }
 
 
@@ -27,11 +27,11 @@ message PacketReply {
   int64 nseg = 2;
 }
 
-message HelloRequest {
-  string name = 1;
+message CamionRequest {
+  string status = 1;
 }
 
 // The response message containing the greetings
-message HelloReply {
-  string message = 1;
+message CamionReply {
+  string algo = 1;
 }

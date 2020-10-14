@@ -17,6 +17,7 @@ import (
 
 const (
 	port = ":50051"
+	port2 = ":9000"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -37,9 +38,64 @@ type PaqueteCola struct{
 	estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 }
 
+
 var colaretail[] PaqueteCola
 var colaprioritario[] PaqueteCola
 var colanormal[] PaqueteCola
+
+//------------------------------ generar paquetes para camiones-------------------------------
+/*func GenerarEnvio(){
+	var enviocamion [6]Registro //6 paquetes que se envian al camion
+	aux := PaqueteCola{} //paquete vacio para hacer comparacion
+	
+	for _,p:= range colaretail{
+		if (!(reflect.DeepEqual(enviocamion[3],void))){
+			break
+		}
+		for i := 0; i < 4 ; i++{
+			if reflect.DeepEqual(enviocamion[i],p){
+				break
+			}
+			if reflect.DeepEqual(enviocamion[i],void){
+				enviocamion[i]=p
+				break
+			}
+		}
+	}
+
+	for _,p:= range colaprioritario{
+		if (!(reflect.DeepEqual(enviocamion[5],void))){
+				break
+		}
+		for j := 0 ; j < 6 ; j++{
+			if reflect.DeepEqual(p[j],p){
+				break
+			}
+			if reflect.DeepEqual(enviocamion[j],void){
+				enviocamion[j]=p
+				break
+			}
+		}
+		
+	}
+
+	for _,p:= range colanormal{
+		if (!(reflect.DeepEqual(enviocamion[5],void))){
+				break
+		}
+		for k := 4 ; k < 6 ; k++{
+			if reflect.DeepEqual(enviocamion[k],p){
+				break
+			}
+			if reflect.DeepEqual(enviocamion[k],void){
+				enviocamion[k]=p
+				break
+			}
+		}
+	}
+	return enviocamion
+}*/
+//-------------------------------------------server logistica---------------------------------
 
 func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.PacketReply, error) {
 	log.Printf("Peticion: %v, Producto: %v", in.GetId(), in.GetProducto())
@@ -88,28 +144,48 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	}else{
 		colaretail= append(colaretail,reg)
 	}
-	fmt.Println(colanormal)
-	fmt.Println(colaprioritario)
-	fmt.Println(colaretail)
+	fmt.Println(colanormal)  //borrar
+	fmt.Println(colaprioritario) //borrar
+	fmt.Println(colaretail) //borrar
   //-----------------------------------escribiendo registro-----------------------------
 
 	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil
 }
-func (s *server) SayHello(ctx context.Context, in *pb.HelloRequest) (*pb.HelloReply, error) {
-	log.Printf("Received: %v", in.GetName())
-	return &pb.HelloReply{Message: "Hello " + in.GetName()}, nil
+ //-----------------------------------servidor camiones---------------------------------
+ func (s *server) Camion(stream pb.Packet_CamionServer) error {
+	
+	for {
+		req, err := stream.Recv()
+		if err != nil {
+			log.Fatalf("RPC failed: %v", err)
+		}
+		fmt.Println(req)
+		resp := pb.CamionReply{Algo: "Envio a request"}
+		if err := stream.Send(&resp); err != nil {
+			log.Printf("send error %v", err)
+		}
+
+	}
+	
+	
 }
 
 func main() {
+	fmt.Println("Bienvenido al servidor de logistica de PrestigioExpress")
 	lis, err := net.Listen("tcp", port)
+
+
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
+
 	s := grpc.NewServer()
 	pb.RegisterPacketServer(s, &server{})
+	
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
+
 	//------------------------------------------------------
 
 

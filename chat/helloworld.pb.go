@@ -173,16 +173,16 @@ func (x *PacketReply) GetNseg() int64 {
 	return 0
 }
 
-type HelloRequest struct {
+type CamionRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Status string `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
 }
 
-func (x *HelloRequest) Reset() {
-	*x = HelloRequest{}
+func (x *CamionRequest) Reset() {
+	*x = CamionRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_helloworld_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -190,13 +190,13 @@ func (x *HelloRequest) Reset() {
 	}
 }
 
-func (x *HelloRequest) String() string {
+func (x *CamionRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HelloRequest) ProtoMessage() {}
+func (*CamionRequest) ProtoMessage() {}
 
-func (x *HelloRequest) ProtoReflect() protoreflect.Message {
+func (x *CamionRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_helloworld_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -208,29 +208,29 @@ func (x *HelloRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HelloRequest.ProtoReflect.Descriptor instead.
-func (*HelloRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CamionRequest.ProtoReflect.Descriptor instead.
+func (*CamionRequest) Descriptor() ([]byte, []int) {
 	return file_helloworld_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *HelloRequest) GetName() string {
+func (x *CamionRequest) GetStatus() string {
 	if x != nil {
-		return x.Name
+		return x.Status
 	}
 	return ""
 }
 
 // The response message containing the greetings
-type HelloReply struct {
+type CamionReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Message string `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	Algo string `protobuf:"bytes,1,opt,name=algo,proto3" json:"algo,omitempty"`
 }
 
-func (x *HelloReply) Reset() {
-	*x = HelloReply{}
+func (x *CamionReply) Reset() {
+	*x = CamionReply{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_helloworld_proto_msgTypes[3]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -238,13 +238,13 @@ func (x *HelloReply) Reset() {
 	}
 }
 
-func (x *HelloReply) String() string {
+func (x *CamionReply) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*HelloReply) ProtoMessage() {}
+func (*CamionReply) ProtoMessage() {}
 
-func (x *HelloReply) ProtoReflect() protoreflect.Message {
+func (x *CamionReply) ProtoReflect() protoreflect.Message {
 	mi := &file_helloworld_proto_msgTypes[3]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -256,14 +256,14 @@ func (x *HelloReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use HelloReply.ProtoReflect.Descriptor instead.
-func (*HelloReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use CamionReply.ProtoReflect.Descriptor instead.
+func (*CamionReply) Descriptor() ([]byte, []int) {
 	return file_helloworld_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *HelloReply) GetMessage() string {
+func (x *CamionReply) GetAlgo() string {
 	if x != nil {
-		return x.Message
+		return x.Algo
 	}
 	return ""
 }
@@ -286,21 +286,21 @@ var file_helloworld_proto_rawDesc = []byte{
 	0x65, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
 	0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
 	0x65, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x73, 0x65, 0x67, 0x18, 0x02, 0x20, 0x01, 0x28, 0x03, 0x52,
-	0x04, 0x6e, 0x73, 0x65, 0x67, 0x22, 0x22, 0x0a, 0x0c, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65,
-	0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x12, 0x0a, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x18, 0x01, 0x20,
-	0x01, 0x28, 0x09, 0x52, 0x04, 0x6e, 0x61, 0x6d, 0x65, 0x22, 0x26, 0x0a, 0x0a, 0x48, 0x65, 0x6c,
-	0x6c, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
-	0x67, 0x65, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x32, 0x8c, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x42, 0x0a, 0x0a,
+	0x04, 0x6e, 0x73, 0x65, 0x67, 0x22, 0x27, 0x0a, 0x0d, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52,
+	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x22, 0x21,
+	0x0a, 0x0b, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x12, 0x0a,
+	0x04, 0x61, 0x6c, 0x67, 0x6f, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x61, 0x6c, 0x67,
+	0x6f, 0x32, 0x90, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x42, 0x0a, 0x0a,
 	0x53, 0x65, 0x6e, 0x64, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x19, 0x2e, 0x68, 0x65, 0x6c,
 	0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65,
 	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72,
 	0x6c, 0x64, 0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00,
-	0x12, 0x3e, 0x0a, 0x08, 0x53, 0x61, 0x79, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x12, 0x18, 0x2e, 0x68,
-	0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52,
-	0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x16, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f,
-	0x72, 0x6c, 0x64, 0x2e, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00,
-	0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x12, 0x42, 0x0a, 0x06, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x12, 0x19, 0x2e, 0x68, 0x65, 0x6c,
+	0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65,
+	0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72,
+	0x6c, 0x64, 0x2e, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00,
+	0x28, 0x01, 0x30, 0x01, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -319,14 +319,14 @@ var file_helloworld_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_helloworld_proto_goTypes = []interface{}{
 	(*PacketRequest)(nil), // 0: helloworld.PacketRequest
 	(*PacketReply)(nil),   // 1: helloworld.PacketReply
-	(*HelloRequest)(nil),  // 2: helloworld.HelloRequest
-	(*HelloReply)(nil),    // 3: helloworld.HelloReply
+	(*CamionRequest)(nil), // 2: helloworld.CamionRequest
+	(*CamionReply)(nil),   // 3: helloworld.CamionReply
 }
 var file_helloworld_proto_depIdxs = []int32{
 	0, // 0: helloworld.Packet.SendPacket:input_type -> helloworld.PacketRequest
-	2, // 1: helloworld.Packet.SayHello:input_type -> helloworld.HelloRequest
+	2, // 1: helloworld.Packet.Camion:input_type -> helloworld.CamionRequest
 	1, // 2: helloworld.Packet.SendPacket:output_type -> helloworld.PacketReply
-	3, // 3: helloworld.Packet.SayHello:output_type -> helloworld.HelloReply
+	3, // 3: helloworld.Packet.Camion:output_type -> helloworld.CamionReply
 	2, // [2:4] is the sub-list for method output_type
 	0, // [0:2] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
@@ -365,7 +365,7 @@ func file_helloworld_proto_init() {
 			}
 		}
 		file_helloworld_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HelloRequest); i {
+			switch v := v.(*CamionRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -377,7 +377,7 @@ func file_helloworld_proto_init() {
 			}
 		}
 		file_helloworld_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*HelloReply); i {
+			switch v := v.(*CamionReply); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -423,7 +423,7 @@ const _ = grpc.SupportPackageIsVersion6
 type PacketClient interface {
 	// Sends a greeting
 	SendPacket(ctx context.Context, in *PacketRequest, opts ...grpc.CallOption) (*PacketReply, error)
-	SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error)
+	Camion(ctx context.Context, opts ...grpc.CallOption) (Packet_CamionClient, error)
 }
 
 type packetClient struct {
@@ -443,20 +443,42 @@ func (c *packetClient) SendPacket(ctx context.Context, in *PacketRequest, opts .
 	return out, nil
 }
 
-func (c *packetClient) SayHello(ctx context.Context, in *HelloRequest, opts ...grpc.CallOption) (*HelloReply, error) {
-	out := new(HelloReply)
-	err := c.cc.Invoke(ctx, "/helloworld.Packet/SayHello", in, out, opts...)
+func (c *packetClient) Camion(ctx context.Context, opts ...grpc.CallOption) (Packet_CamionClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_Packet_serviceDesc.Streams[0], "/helloworld.Packet/Camion", opts...)
 	if err != nil {
 		return nil, err
 	}
-	return out, nil
+	x := &packetCamionClient{stream}
+	return x, nil
+}
+
+type Packet_CamionClient interface {
+	Send(*CamionRequest) error
+	Recv() (*CamionReply, error)
+	grpc.ClientStream
+}
+
+type packetCamionClient struct {
+	grpc.ClientStream
+}
+
+func (x *packetCamionClient) Send(m *CamionRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *packetCamionClient) Recv() (*CamionReply, error) {
+	m := new(CamionReply)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
 }
 
 // PacketServer is the server API for Packet service.
 type PacketServer interface {
 	// Sends a greeting
 	SendPacket(context.Context, *PacketRequest) (*PacketReply, error)
-	SayHello(context.Context, *HelloRequest) (*HelloReply, error)
+	Camion(Packet_CamionServer) error
 }
 
 // UnimplementedPacketServer can be embedded to have forward compatible implementations.
@@ -466,8 +488,8 @@ type UnimplementedPacketServer struct {
 func (*UnimplementedPacketServer) SendPacket(context.Context, *PacketRequest) (*PacketReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendPacket not implemented")
 }
-func (*UnimplementedPacketServer) SayHello(context.Context, *HelloRequest) (*HelloReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
+func (*UnimplementedPacketServer) Camion(Packet_CamionServer) error {
+	return status.Errorf(codes.Unimplemented, "method Camion not implemented")
 }
 
 func RegisterPacketServer(s *grpc.Server, srv PacketServer) {
@@ -492,22 +514,30 @@ func _Packet_SendPacket_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Packet_SayHello_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(HelloRequest)
-	if err := dec(in); err != nil {
+func _Packet_Camion_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(PacketServer).Camion(&packetCamionServer{stream})
+}
+
+type Packet_CamionServer interface {
+	Send(*CamionReply) error
+	Recv() (*CamionRequest, error)
+	grpc.ServerStream
+}
+
+type packetCamionServer struct {
+	grpc.ServerStream
+}
+
+func (x *packetCamionServer) Send(m *CamionReply) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *packetCamionServer) Recv() (*CamionRequest, error) {
+	m := new(CamionRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
-	if interceptor == nil {
-		return srv.(PacketServer).SayHello(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/helloworld.Packet/SayHello",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PacketServer).SayHello(ctx, req.(*HelloRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	return m, nil
 }
 
 var _Packet_serviceDesc = grpc.ServiceDesc{
@@ -518,11 +548,14 @@ var _Packet_serviceDesc = grpc.ServiceDesc{
 			MethodName: "SendPacket",
 			Handler:    _Packet_SendPacket_Handler,
 		},
+	},
+	Streams: []grpc.StreamDesc{
 		{
-			MethodName: "SayHello",
-			Handler:    _Packet_SayHello_Handler,
+			StreamName:    "Camion",
+			Handler:       _Packet_Camion_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
 	Metadata: "helloworld.proto",
 }
