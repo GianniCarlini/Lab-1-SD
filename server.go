@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 	"fmt"
+	"reflect"
 	//"io/ioutil"
 	"os"
 	"encoding/csv"
@@ -44,19 +45,19 @@ var colaprioritario[] PaqueteCola
 var colanormal[] PaqueteCola
 
 //------------------------------ generar paquetes para camiones-------------------------------
-/*func GenerarEnvio(){
-	var enviocamion [6]Registro //6 paquetes que se envian al camion
+func GenerarEnvio() [6]PaqueteCola {
+	var enviocamion [6]PaqueteCola //6 paquetes que se envian al camion
 	aux := PaqueteCola{} //paquete vacio para hacer comparacion
 	
 	for _,p:= range colaretail{
-		if (!(reflect.DeepEqual(enviocamion[3],void))){
+		if (!(reflect.DeepEqual(enviocamion[3],aux))){ //compara si la cola esta vacia hasta los primeros 4 paquetes para camiones 1 y 2
 			break
 		}
 		for i := 0; i < 4 ; i++{
 			if reflect.DeepEqual(enviocamion[i],p){
 				break
 			}
-			if reflect.DeepEqual(enviocamion[i],void){
+			if reflect.DeepEqual(enviocamion[i],aux){
 				enviocamion[i]=p
 				break
 			}
@@ -64,14 +65,14 @@ var colanormal[] PaqueteCola
 	}
 
 	for _,p:= range colaprioritario{
-		if (!(reflect.DeepEqual(enviocamion[5],void))){
+		if (!(reflect.DeepEqual(enviocamion[5],aux))){ //compara si la cola esta vacia hasta los ultimos 2 paquetes 
 				break
 		}
 		for j := 0 ; j < 6 ; j++{
-			if reflect.DeepEqual(p[j],p){
+			if reflect.DeepEqual(enviocamion[j],p){
 				break
 			}
-			if reflect.DeepEqual(enviocamion[j],void){
+			if reflect.DeepEqual(enviocamion[j],aux){
 				enviocamion[j]=p
 				break
 			}
@@ -80,21 +81,21 @@ var colanormal[] PaqueteCola
 	}
 
 	for _,p:= range colanormal{
-		if (!(reflect.DeepEqual(enviocamion[5],void))){
+		if (!(reflect.DeepEqual(enviocamion[5],aux))){ //compara si la cola esta vacia hasta los ultimos 2 paquetes 
 				break
 		}
 		for k := 4 ; k < 6 ; k++{
 			if reflect.DeepEqual(enviocamion[k],p){
 				break
 			}
-			if reflect.DeepEqual(enviocamion[k],void){
+			if reflect.DeepEqual(enviocamion[k],aux){
 				enviocamion[k]=p
 				break
 			}
 		}
 	}
 	return enviocamion
-}*/
+}
 //-------------------------------------------server logistica---------------------------------
 
 func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.PacketReply, error) {
@@ -112,7 +113,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	}
 	seg := strconv.Itoa(int(seguimiento3))
 	Value := strconv.FormatInt(in.GetValor(), 10)
-	t := time.Now().Format(time.ANSIC)
+	t := time.Now().Format("03-10-2020 13:00")
 	var registros []string
 	registros = append(registros, t,in.GetId(),in.GetTipo(),in.GetProducto(),Value,in.GetTienda(),in.GetDestino(),seg)
 	registros2 = append(registros2, registros)
@@ -160,11 +161,23 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 			log.Fatalf("RPC failed: %v", err)
 		}
 		fmt.Println(req)
-		resp := pb.CamionReply{Algo: "Envio a request"}
-		if err := stream.Send(&resp); err != nil {
-			log.Printf("send error %v", err)
-		}
 
+		envio := GenerarEnvio() //genero los paquetes a enviar
+		
+		for _, paquetecamion:= range envio{
+			resp := pb.CamionReply{
+				IdPaquete: paquetecamion.id_paquete,
+				Seguimiento: paquetecamion.seguimiento,
+				Tipo: paquetecamion.tipo,
+				Valor: paquetecamion.valor,
+				Intentos: paquetecamion.intentos,
+				Estado: 1,
+			}
+			if err := stream.Send(&resp); err != nil {
+				log.Printf("send error %v", err)
+			}
+	
+		}
 	}
 	
 	
