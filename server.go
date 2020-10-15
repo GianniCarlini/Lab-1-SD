@@ -113,12 +113,12 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	}
 	seg := strconv.Itoa(int(seguimiento3))
 	Value := strconv.FormatInt(in.GetValor(), 10)
-	t := time.Now().Format("03-10-2020 13:00")
+	t := time.Now().Format("02-01-2006 15:04:05")
 	var registros []string
 	registros = append(registros, t,in.GetId(),in.GetTipo(),in.GetProducto(),Value,in.GetTienda(),in.GetDestino(),seg)
 	registros2 = append(registros2, registros)
  //-----------------------------------escribiendo registro-----------------------------
-	file, err := os.OpenFile("test.csv", os.O_CREATE|os.O_WRONLY, 0777)
+	file, err := os.OpenFile("retail.csv", os.O_CREATE|os.O_WRONLY, 0777)
     defer file.Close()
  
     if err != nil {
@@ -148,7 +148,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	fmt.Println(colanormal)  //borrar
 	fmt.Println(colaprioritario) //borrar
 	fmt.Println(colaretail) //borrar
-  //-----------------------------------escribiendo registro-----------------------------
+  //-----------------------------------------------------------------------------------
 
 	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil
 }

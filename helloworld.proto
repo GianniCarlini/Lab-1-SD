@@ -3,6 +3,7 @@ syntax = "proto3";
 package helloworld;
 
 
+
 service Packet {
   // Sends a greeting
   rpc SendPacket (PacketRequest) returns (PacketReply) {}
@@ -28,7 +29,12 @@ message PacketReply {
 }
 
 message CamionRequest {
-  string status = 1;
+    string id_paquete = 1;
+    int64 seguimiento = 2;
+    string tipo = 3;
+    int64 valor = 4;
+    int64 intentos = 5;
+    int64 estado = 6;
 }
 
 // The response message containing the greetings
