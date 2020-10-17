@@ -39,11 +39,14 @@ type PaqueteCola struct{
 	estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 }
 
-
+var finanzas[] PaqueteCola
 var colaretail[] PaqueteCola
 var colaprioritario[] PaqueteCola
 var colanormal[] PaqueteCola
-
+//--------------funcion de internet para borrar --------------------------------------------
+func Remove(s []PaqueteCola, index int) []PaqueteCola {
+	return append(s[:index], s[index+1:]...)
+}
 //------------------------------ generar paquetes para camiones-------------------------------
 func GenerarEnvio() [6]PaqueteCola {
 	var enviocamion [6]PaqueteCola //6 paquetes que se envian al camion
@@ -154,30 +157,90 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 }
  //-----------------------------------servidor camiones---------------------------------
  func (s *server) Camion(stream pb.Packet_CamionServer) error {
-	
+	contador := 0
+	entrega := [6]PaqueteCola{} // array de entregas para recepcion de la entrega del paqute
 	for {
-		req, err := stream.Recv()
+		r, err := stream.Recv()
 		if err != nil {
 			log.Fatalf("RPC failed: %v", err)
 		}
-		fmt.Println(req)
-
-		envio := GenerarEnvio() //genero los paquetes a enviar
+		// aca va logica si el paquete es nulo pos xd sino borro lo que me enviaron y reenvio calculos
+		if r.Estado != int64(-9999){
+			//maximo 6 paquetes
+			entrega[contador] = PaqueteCola{
+				id_paquete: r.IdPaquete,   
+				seguimiento: r.Seguimiento,
+				tipo: r.Tipo,        
+				valor: r.Valor,       
+				intentos: r.Intentos,    
+				estado: r.Estado,	
+			}
+			contador += 1
+			if contador == 6{//cuando recepcione los 6 paquetes
+				normal := "normal"
+				prioritario := "prioritario"
+				retail := "retail"
+				for _,paquete := range entrega{
+					fmt.Println(paquete)
+					fmt.Println("mi id: %v",paquete.id_paquete)
+					if reflect.DeepEqual(paquete,PaqueteCola{estado:1}){
+						continue
+					}else{
+					if paquete.tipo == normal{
+						for i,paquetecolanormal := range colanormal{
+							if paquete.id_paquete == paquetecolanormal.id_paquete{
+								//borro
+								colanormal = Remove(colanormal,i)
+								break
+							}
+						}
+					}
+					if paquete.tipo == prioritario{
+						for i,paquetecolaprioritario := range colaprioritario{
+							if paquete.id_paquete == paquetecolaprioritario.id_paquete{
+								colaprioritario = Remove(colaprioritario,i)
+								break
+							}
+						}
+					}
+					if paquete.tipo == retail{
+						for i,paquetecolaretail := range colaretail{
+							if paquete.id_paquete == paquetecolaretail.id_paquete{
+								colaretail = Remove(colaretail,i)
+								break
+							}
+						}
+					}
+					finanzas = append(finanzas,paquete)
+					}
+				}
+				fmt.Println(len(colaretail))
+				fmt.Println(len(colaprioritario))
+				fmt.Println(len(colanormal))
+				fmt.Println(len(finanzas))
+				contador = 0
+			}
+		}else{
+			envio := GenerarEnvio() //genero los paquetes a enviar
 		
-		for _, paquetecamion:= range envio{
-			resp := pb.CamionReply{
-				IdPaquete: paquetecamion.id_paquete,
-				Seguimiento: paquetecamion.seguimiento,
-				Tipo: paquetecamion.tipo,
-				Valor: paquetecamion.valor,
-				Intentos: paquetecamion.intentos,
-				Estado: 1,
+			for _, paquetecamion:= range envio{
+				resp := pb.CamionReply{
+					IdPaquete: paquetecamion.id_paquete,
+					Seguimiento: paquetecamion.seguimiento,
+					Tipo: paquetecamion.tipo,
+					Valor: paquetecamion.valor,
+					Intentos: paquetecamion.intentos,
+					Estado: 1,
+				}
+				if err := stream.Send(&resp); err != nil {
+					log.Printf("send error %v", err)
+				}
+				
 			}
-			if err := stream.Send(&resp); err != nil {
-				log.Printf("send error %v", err)
-			}
-	
+
+
 		}
+
 	}
 	
 	

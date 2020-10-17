@@ -37,7 +37,7 @@ func ordenar(p1 PaqueteCola, p2 PaqueteCola) (PaqueteCola, PaqueteCola){
 	}
 }
 func reparto(r [2]PaqueteCola)[2]PaqueteCola{
-	aux := PaqueteCola{}
+	aux := PaqueteCola{estado:1}
 	normal := "normal"
 	prioritario := "prioritario"
 	retail := "retail"
@@ -50,6 +50,7 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 			var t int
 			if k==3{ //paquete en intento numero 4
 				p.estado = 3
+				p.intentos = int64(k)
 				fmt.Println("no me quieren")
 				break
 			}
@@ -63,8 +64,9 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 				t = 3
 			}
 			fmt.Println(p.tipo)
-			if t<2 && int64(k)*10>p.valor{
+			if t<=2 && int64(k)*10>p.valor{
 				p.estado = 3
+				p.intentos = int64(k)
 				fmt.Println("No me quieren")
 				break
 			}
@@ -75,6 +77,7 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 			if exito < 80{
 				p.estado = 2
 				p.fecha = time.Now().Format("02-01-2006 15:04:05")
+				p.intentos = int64(k)
 				fmt.Println("Me recibieron")
 				break
 			}
@@ -97,8 +100,9 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	camionretail1 = reparto(camionretail1)
 	camionretail2 = reparto(camionretail2)
 	camionnormal = reparto(camionnormal)
+	resultado := [6]PaqueteCola{camionretail1[0],camionretail1[1], camionretail2[0], camionretail2[1], camionnormal[0], camionnormal[1]} 
 	//------------------------aca tengo que escribir los registros-------------------------
-	var registros13 [][]string
+	/*var registros13 [][]string
 	file3, err := os.OpenFile("rcamion1.csv", os.O_CREATE|os.O_WRONLY, 0777)
 	defer file3.Close()
 
@@ -159,12 +163,9 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	csvWriter3.Flush()
 	registros31 = nil
 	registros32 = nil
-	registros33 = nil
+	registros33 = nil*/
 	//----------------------------------------------------------------------
-	fmt.Println(camionretail1)
-	fmt.Println(camionretail2)
-	fmt.Println(camionnormal)
-	resultado := [6]PaqueteCola{camionretail1[0],camionretail1[1], camionretail2[0], camionretail2[1], camionnormal[0], camionnormal[1]} 
+
 	return resultado
 }
 
@@ -186,7 +187,7 @@ func main() {
 		Tipo: "",
 		Valor: 0,
 		Intentos: 0,
-		Estado: 0,}
+		Estado: -9999,}
 	go func() {
 		for i := 1; i <= 1; i++ {
 			stream.Send(msg)
@@ -224,6 +225,8 @@ func main() {
 						Estado: pp.estado }
 					stream.Send(m)
 				}
+				stream.Send(msg)
+				cont = 0
 			}
 			time.Sleep(1 * time.Second)
 		}
