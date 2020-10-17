@@ -8,6 +8,7 @@ service Packet {
   // Sends a greeting
   rpc SendPacket (PacketRequest) returns (PacketReply) {}
   rpc Camion (stream CamionRequest) returns (stream CamionReply) {}
+  rpc Seguimiento (SeguimientoRequest) returns (SeguimientoReply) {}
 }
 
 
@@ -45,4 +46,13 @@ message CamionReply {
     int64 valor = 4;
     int64 intentos = 5;
     int64 estado = 6;
+}
+
+message SeguimientoRequest {
+  int64 codigo = 1;
+}
+
+
+message SeguimientoReply {
+  string estadoseguimiento = 1;
 }

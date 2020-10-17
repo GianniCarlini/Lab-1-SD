@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	address = "10.10.28.68:50051"
+	address = "localhost:50051"
 )
 type PaqueteCola struct{
 	id_paquete string

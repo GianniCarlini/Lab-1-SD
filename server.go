@@ -18,7 +18,7 @@ import (
 
 const (
 	port = ":50051"
-	port2 = ":9000"
+	port2 = ":50052"
 )
 
 // server is used to implement helloworld.GreeterServer.
@@ -181,8 +181,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 				prioritario := "prioritario"
 				retail := "retail"
 				for _,paquete := range entrega{
-					fmt.Println(paquete)
-					fmt.Println("mi id: %v",paquete.id_paquete)
+					fmt.Println(paquete) //-------------------------no olvidar borrar------------------------------
 					if reflect.DeepEqual(paquete,PaqueteCola{estado:1}){
 						continue
 					}else{
@@ -214,10 +213,6 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 					finanzas = append(finanzas,paquete)
 					}
 				}
-				fmt.Println(len(colaretail))
-				fmt.Println(len(colaprioritario))
-				fmt.Println(len(colanormal))
-				fmt.Println(len(finanzas))
 				contador = 0
 			}
 		}else{
@@ -245,10 +240,66 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	
 	
 }
+func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*pb.SeguimientoReply, error) {
+	log.Printf("Received: %v", in.GetCodigo())
+	esta2 := "xd"
+	for _,codigo := range finanzas{
+		if in.GetCodigo() == codigo.seguimiento{
+			fmt.Println("soy completado")
+			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
+			if codigo.estado == 0{
+				esta2 = "En bodega"
+			}else if codigo.estado == 1{
+				esta2 = "En Camino"
+			}else if codigo.estado == 2{
+				esta2 = "Recibido "
+			}else{
+				esta2 = "No Recibido"
+			}
+			
+		}
+	}
+	for _,codigo := range colanormal{
+		if in.GetCodigo() == codigo.seguimiento{
+			fmt.Println("soy colanormal")
+			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
+			if codigo.estado == 0{
+				esta2 = "En bodega"
+			}else if codigo.estado == 1{
+				esta2 = "En Camino"
+			}else if codigo.estado == 2{
+				esta2 = "Recibido "
+			}else{
+				esta2 = "No Recibido"
+			}
+		}
+	}
+	for _,codigo := range colaprioritario{
+		if in.GetCodigo() == codigo.seguimiento{
+			fmt.Println("soy colaprioritario")
+			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
+			if codigo.estado == 0{
+				esta2 = "En bodega"
+			}else if codigo.estado == 1{
+				esta2 = "En Camino"
+			}else if codigo.estado == 2{
+				esta2 = "Recibido "
+			}else{
+				esta2 = "No Recibido"
+			}
+		}
+	}
+	if esta2 == "xd"{
+		esta2 = "No esta en sistema"
+	}
+	
+	return &pb.SeguimientoReply{Estadoseguimiento: esta2,}, nil
+}
 
 func main() {
 	fmt.Println("Bienvenido al servidor de logistica de PrestigioExpress")
 	lis, err := net.Listen("tcp", port)
+	lis2, err := net.Listen("tcp", port2)
 
 
 	if err != nil {
@@ -257,8 +308,11 @@ func main() {
 
 	s := grpc.NewServer()
 	pb.RegisterPacketServer(s, &server{})
-	
+
 	if err := s.Serve(lis); err != nil {
+		log.Fatalf("failed to serve: %v", err)
+	}
+	if err := s.Serve(lis2); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
 

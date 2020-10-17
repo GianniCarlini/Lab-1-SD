@@ -32,7 +32,8 @@ type Pymes struct {
 }
 
 const (
-	address = "10.10.28.68:50051"
+	address = "localhost:50051"
+	address2 = "localhost:50052"
 )
 var nseguimiento map[string]int64
 
@@ -43,7 +44,7 @@ func main() {
 	if err != nil {
 		log.Printf("..............", err)
 	}
-//----------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------
 	nseguimiento = make(map[string]int64) //variable que contiene el id del producto y su respectivo id de seguimiento
 
 	// Set up a connection to the server.
@@ -53,14 +54,15 @@ func main() {
 	}
 	defer conn.Close()
 	c := pb.NewPacketClient(conn)
-
+ for{	
 	var comportamiento int
 	fmt.Println("Ingrese 1 si el comportamiento a seguir es tipo retail")
 	fmt.Println("Ingrese 2 si el comportamiento a seguir es tipo pyme")
+	fmt.Println("Ingrese 3 si quiere realizar un seguimiento")
 	fmt.Scanln(&comportamiento)
 
-	
- switch comportamiento {
+
+    switch comportamiento {
  //------------------------- Lectura archivo retail --------------------------------------------
 	case 1:
 	file, err := os.Open("csv/retail.csv")
@@ -167,7 +169,7 @@ func main() {
 		}
 		rawData2 = append(rawData2, c2)
 	}
- //------------------------- Envio paquete Pymes--------------------------------------------
+ 		//------------------------- Envio paquete Pymes--------------------------------------------
 	for i := 0; i < len(rawData2); i++ {
 		id := rawData2[i].id
 		producto := rawData2[i].producto
@@ -194,8 +196,31 @@ func main() {
 			log.Fatalf("could not greet: %v", err)
 		}
 		log.Printf("Pedido id %s ingresado", r.GetMessage())
-		log.Printf("Su numero de seguimiento es: 18%v", int(r.GetNseg()))
+		log.Printf("Su numero de seguimiento es: %v", int(r.GetNseg()))
 		nseguimiento[r.GetMessage()] = r.GetNseg() //agregando key:id,value:seguimiento
 	}
- } 
+	//-----------------------------------------seguimiento-------------------------------------------------------------------
+	case 3:
+			var codigo int64
+			fmt.Printf("ingrese su codigo: ")
+			fmt.Scanln(&codigo)
+			time.Sleep(1 * time.Second)
+
+
+			c2 := pb.NewPacketClient(conn)
+
+			ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+			defer cancel()
+
+			
+			r, err := c2.Seguimiento(ctx, &pb.SeguimientoRequest{Codigo: codigo}) 
+			if err != nil {
+				log.Fatalf("could not greet: %v", err)
+			}
+			fmt.Println(r.GetEstadoseguimiento())
+	default:
+		fmt.Println("Elija una opcion de las mencionadas")
+	}
+ }		
+	  
 }
