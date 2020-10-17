@@ -32,7 +32,7 @@ type Pymes struct {
 }
 
 const (
-	address = "localhost:50051"
+	address = "10.10.28.68:50051"
 )
 var nseguimiento map[string]int64
 
