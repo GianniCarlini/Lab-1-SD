@@ -31,6 +31,7 @@ type PaqueteCola struct{
 var camion1 [][] string
 var camion2 [][] string
 var camion3 [][] string
+var sleeptime int
 
 //-----------------------------funcion para ordenar los paquetes de cada camion por valor---------------------------
 func ordenar(p1 PaqueteCola, p2 PaqueteCola) (PaqueteCola, PaqueteCola){ 
@@ -47,6 +48,7 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 	prioritario := "prioritario"
 	retail := "retail"
 	for iteracion,p := range r{
+		time.Sleep(time.Duration(sleeptime) * time.Second)
 		if reflect.DeepEqual(p,aux){ //caso base reviso si esta vacio (estado en camino)
 			continue
 		}
@@ -56,7 +58,6 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 			if k==3{ //paquete en intento numero 4
 				p.estado = 3
 				p.intentos = int64(k)
-				p.fecha = 0
 				fmt.Println("No me quieren")
 				break
 			}
@@ -69,11 +70,9 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 			if p.tipo == retail{
 				t = 3
 			}
-			fmt.Println(p.tipo)
 			if t<=2 && int64(k)*10>p.valor{ //condiciones para pyme
 				p.estado = 3
 				p.intentos = int64(k)
-				p.fecha = 0
 				fmt.Println("No me quieren")
 				break
 			}
@@ -115,8 +114,6 @@ func registrocamion(entrega [6]PaqueteCola){
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
-		fmt.Println(r.GetOrigen())
-		fmt.Println(r.GetDestino())
 		reg:= []string{p.id_paquete,p.tipo,strconv.FormatInt(p.valor,10), r.GetOrigen(), r.GetDestino(),strconv.FormatInt(p.intentos,10),p.fecha} //creo array registro
 
 	if i == 0 || i == 1{ //casos camion 1
@@ -176,6 +173,9 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 }
 
 func main() {
+	fmt.Println("Ingrese el ")
+	fmt.Scanln(&sleeptime)
+
 	var colaenvios[6]PaqueteCola //max 6 paquetes para los camiones, cola para asignacion en planta(?)
 //--------------------------------------conexion grpc---------------------------------------
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
@@ -223,6 +223,7 @@ func main() {
 			if cont > 5{ // me llegaron 6 paquetes hago similacion
 				cont = 0
 				r = simulacion(colaenvios)
+				fmt.Println("Haciendo Reparto")
 				for _, pp := range r{
 					m := &pb.CamionRequest{
 						IdPaquete: pp.id_paquete,   
@@ -234,6 +235,7 @@ func main() {
 					stream.Send(m) //envio resultados a logisitca
 				}
 				stream.Send(msg) //mando paquete fantasma para que me envien mas paquetes a repartir
+				fmt.Println("Esperando nuevos paquetes")
 				cont = 0
 			}
 			time.Sleep(1 * time.Second)

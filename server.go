@@ -10,9 +10,9 @@ import (
 	"reflect"
 	"os"
 	"encoding/csv"
-	"encoding/json"
+//	"encoding/json"
 
-	"github.com/streadway/amqp"
+//	"github.com/streadway/amqp"
 
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
@@ -321,7 +321,7 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 
 	return &pb.SeguimientoReply{Estadoseguimiento: esta2,}, nil
 }
-func failOnError(err error, msg string) {
+/*func failOnError(err error, msg string) {
 	if err != nil {
 	  log.Fatalf("%s: %s", msg, err)
 	}
@@ -373,7 +373,7 @@ func Rabbit(){
 	failOnError(err, "Failed to publish a message")
 
 	fmt.Println("Successfully Published Message to Queue")
-}
+}*/
 
 func main() {
 	fmt.Println("Bienvenido al servidor de logistica de PrestigioExpress")
@@ -385,9 +385,7 @@ func main() {
 
 	s := grpc.NewServer()
 
-	Rabbit()
-
-
+	//Rabbit()
 	pb.RegisterPacketServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
