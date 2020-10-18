@@ -32,20 +32,22 @@ var camion1 [][] string
 var camion2 [][] string
 var camion3 [][] string
 
-func ordenar(p1 PaqueteCola, p2 PaqueteCola) (PaqueteCola, PaqueteCola){
+//-----------------------------funcion para ordenar los paquetes de cada camion por valor---------------------------
+func ordenar(p1 PaqueteCola, p2 PaqueteCola) (PaqueteCola, PaqueteCola){ 
 	if p1.valor < p2.valor {
 		return p2,p1
 	} else {
 		return p1,p2
 	}
 }
-func reparto(r [2]PaqueteCola)[2]PaqueteCola{
-	aux := PaqueteCola{estado:1}
+//----------------------------------funcion que realiza la logica de reparto---------------------------------------
+func reparto(r [2]PaqueteCola)[2]PaqueteCola{ 
+	aux := PaqueteCola{estado:1} //aux para verificar errores en paquetes
 	normal := "normal"
 	prioritario := "prioritario"
 	retail := "retail"
 	for iteracion,p := range r{
-		if reflect.DeepEqual(p,aux){ //caso base reviso si esta vacio
+		if reflect.DeepEqual(p,aux){ //caso base reviso si esta vacio (estado en camino)
 			continue
 		}
 		// cantidad de intentos son 3 (retail 3 si o si y pyme 1+2 reintentos si es valor positivo)
@@ -54,7 +56,8 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 			if k==3{ //paquete en intento numero 4
 				p.estado = 3
 				p.intentos = int64(k)
-				fmt.Println("no me quieren")
+				p.fecha = 0
+				fmt.Println("No me quieren")
 				break
 			}
 			if p.tipo == normal{
@@ -67,17 +70,19 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 				t = 3
 			}
 			fmt.Println(p.tipo)
-			if t<=2 && int64(k)*10>p.valor{
+			if t<=2 && int64(k)*10>p.valor{ //condiciones para pyme
 				p.estado = 3
 				p.intentos = int64(k)
+				p.fecha = 0
 				fmt.Println("No me quieren")
 				break
 			}
+			//abajo genero numero random entre 0-100 para el  80%
 			s1 := rand.NewSource(time.Now().UnixNano())
 			r1 := rand.New(s1)
 			exito := r1.Intn(101)
 
-			if exito < 80{
+			if exito < 80{ //si el numero es entre 0-80 exito en la entrega
 				p.estado = 2
 				p.fecha = time.Now().Format("02-01-2006 15:04:05")
 				p.intentos = int64(k)
@@ -88,10 +93,12 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 		} 
 		r[iteracion]=p
 	}
-	return r
+	return r //retorno el mismo camion(array) que entro
 }
+
+//------------------------------- funcion para generar los registros por camion-------------------------------
 func registrocamion(entrega [6]PaqueteCola){
-	conn, err := grpc.Dial(address, grpc.WithInsecure())
+	conn, err := grpc.Dial(address, grpc.WithInsecure()) //coneccion grpc para pedir el origen y destino ya que no lo pedian en pdf para la primera conexion
 		
 		if err != nil {
 			log.Fatalf("Conn err: %v", err)
@@ -101,18 +108,18 @@ func registrocamion(entrega [6]PaqueteCola){
 		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-	for i,p := range entrega{
+	for i,p := range entrega{ //itero sobre los 6 paquetes entregados
 		var nombre string
 
-		r, err := c.Od(ctx, &pb.OdRequest{Id: p.id_paquete}) 
+		r, err := c.Od(ctx, &pb.OdRequest{Id: p.id_paquete}) //peticion con id paquete
 		if err != nil {
 			log.Fatalf("could not greet: %v", err)
 		}
 		fmt.Println(r.GetOrigen())
 		fmt.Println(r.GetDestino())
-		reg:= []string{p.id_paquete,p.tipo,strconv.FormatInt(p.valor,10), r.GetOrigen(), r.GetDestino(),strconv.FormatInt(p.intentos,10),p.fecha}
+		reg:= []string{p.id_paquete,p.tipo,strconv.FormatInt(p.valor,10), r.GetOrigen(), r.GetDestino(),strconv.FormatInt(p.intentos,10),p.fecha} //creo array registro
 
-	if i == 0 || i == 1{
+	if i == 0 || i == 1{ //casos camion 1
 		nombre = "rcamion1.csv"
 		camion1=append(camion1,reg)
 		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
@@ -123,7 +130,7 @@ func registrocamion(entrega [6]PaqueteCola){
 		csvWriter:= csv.NewWriter(file)
 		csvWriter.WriteAll(camion1)
 		csvWriter.Flush()
-	}else if i == 2 || i == 3 {
+	}else if i == 2 || i == 3 { //casos camion 2
 		nombre = "rcamion2.csv"
 		camion2=append(camion2,reg)
 		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
@@ -134,7 +141,7 @@ func registrocamion(entrega [6]PaqueteCola){
 		csvWriter:= csv.NewWriter(file)
 		csvWriter.WriteAll(camion2)
 		csvWriter.Flush()
-	}else if i == 4 || i == 5 {
+	}else if i == 4 || i == 5 { //casos camion 3
 		nombre ="rcamion3.csv"
 		camion3=append(camion3,reg)
 		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
@@ -160,91 +167,17 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	camionretail1 = reparto(camionretail1)
 	camionretail2 = reparto(camionretail2)
 	camionnormal = reparto(camionnormal)
+	// array con las 6 entregas completadas
 	entrega := [6]PaqueteCola{camionretail1[0],camionretail1[1], camionretail2[0], camionretail2[1], camionnormal[0], camionnormal[1]} 
- //--------------------------------------------------------------------------------------------------------------------------
+	//hago el registro por camion en csv
 	registrocamion(entrega)
-	/*c := pb.NewPacketClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-
-
-	r, err := c.Od(ctx, &pb.OdRequest{Id: codigo}) 
-	if err != nil {
-		log.Fatalf("could not greet: %v", err)
-	}
-	fmt.Println(r.)*/
-	//------------------------aca tengo que escribir los registros-------------------------
-	/*var registros13 [][]string
-	file3, err := os.OpenFile("rcamion1.csv", os.O_CREATE|os.O_WRONLY, 0777)
-	defer file3.Close()
-
-	if err != nil {
-		os.Exit(1)
-	}
-	csvWriter := csv.NewWriter(file3)
-	Value11 := strconv.FormatInt(camionretail1[0].valor, 10)
-	registros11 := []string{camionretail1[0].id_paquete,strconv.FormatInt(camionretail1[0].seguimiento, 10),camionretail1[0].tipo,Value11,strconv.FormatInt(camionretail1[0].intentos, 10),strconv.FormatInt(camionretail1[0].estado, 10),camionretail1[0].fecha}
-	registros13 = append(registros13, registros11)
-	Value12 := strconv.FormatInt(camionretail1[1].valor, 10)
-	registros12 := []string{camionretail1[1].id_paquete,strconv.FormatInt(camionretail1[1].seguimiento, 10),camionretail1[1].tipo,Value12,strconv.FormatInt(camionretail1[1].intentos, 10),strconv.FormatInt(camionretail1[1].estado, 10),camionretail1[1].fecha}
-	registros13 = append(registros13, registros12)
-	strWrite := registros13
-	csvWriter.WriteAll(strWrite)
-	csvWriter.Flush()
-	registros11 = nil
-	registros12 = nil
-	registros13 = nil
-	//-------------------------------------------------------------------------------------
-	var registros23 [][]string
-	file5, err := os.OpenFile("rcamion2.csv", os.O_CREATE|os.O_WRONLY, 0777)
-	defer file5.Close()
-
-	if err != nil {
-		os.Exit(1)
-	}
-	csvWriter2 := csv.NewWriter(file5)
-	Value21 := strconv.FormatInt(camionretail2[0].valor, 10)
-	registros21 := []string{camionretail2[0].id_paquete,Value21}
-	registros23 = append(registros23, registros21)
-	Value22 := strconv.FormatInt(camionretail2[1].valor, 10)
-	registros22 := []string{camionretail2[1].id_paquete,Value22}
-	registros23 = append(registros23, registros22)
-	strWrite2 := registros23
-	csvWriter2.WriteAll(strWrite2)
-	csvWriter2.Flush()
-	registros21 = nil
-	registros22 = nil
-	registros23 = nil
-	//-------------------------------------------------------------------------------------
-	var registros33 [][]string
-	file2, err := os.OpenFile("rcamion3.csv", os.O_CREATE|os.O_WRONLY, 0777)
-	defer file2.Close()
-
-	if err != nil {
-		os.Exit(1)
-	}
-	csvWriter3 := csv.NewWriter(file2)
-	Value31 := strconv.FormatInt(camionnormal[0].valor, 10)
-	registros31 := []string{camionnormal[0].id_paquete,Value31}
-	registros33 = append(registros33, registros31)
-	Value32 := strconv.FormatInt(camionnormal[1].valor, 10)
-	registros32 := []string{camionnormal[1].id_paquete,Value32}
-	registros33 = append(registros33, registros32)
-	strWrite3 := registros33
-	csvWriter3.WriteAll(strWrite3)
-	csvWriter3.Flush()
-	registros31 = nil
-	registros32 = nil
-	registros33 = nil*/
-	//----------------------------------------------------------------------
-
-	return entrega
+	return entrega //retorno un viaje completado de los 3 camiones
 }
 
 func main() {
 	var colaenvios[6]PaqueteCola //max 6 paquetes para los camiones, cola para asignacion en planta(?)
-
+//--------------------------------------conexion grpc---------------------------------------
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("Conn err: %v", err)
@@ -261,17 +194,19 @@ func main() {
 		Valor: 0,
 		Intentos: 0,
 		Estado: -9999,}
+
+//----------------- go routine para enviar paquete fantasma-------------------------
 	go func() {
 		for i := 1; i <= 1; i++ {
 			stream.Send(msg)
 		}
 	}()
-
+//-------- goruoutine para enviar paquetes completados y hacer simulacion------------
 	go func() {
 		var r [6]PaqueteCola
 		cont := 0
 		for {
-			resp, err := stream.Recv()
+			resp, err := stream.Recv() //recivo los paquetes desde logistica
 			paquetazo := PaqueteCola{
 				id_paquete: resp.IdPaquete,
 				seguimiento: resp.Seguimiento,
@@ -283,9 +218,9 @@ func main() {
 			if err != nil {
 				log.Fatalf("can not receive %v", err)
 			}
-			colaenvios[cont] = paquetazo
+			colaenvios[cont] = paquetazo //creo una cola de envios para realizar la simulacion
 			cont += 1
-			if cont > 5{
+			if cont > 5{ // me llegaron 6 paquetes hago similacion
 				cont = 0
 				r = simulacion(colaenvios)
 				for _, pp := range r{
@@ -296,16 +231,14 @@ func main() {
 						Valor: pp.valor,       
 						Intentos: pp.intentos,    
 						Estado: pp.estado }
-					stream.Send(m)
+					stream.Send(m) //envio resultados a logisitca
 				}
-				stream.Send(msg)
+				stream.Send(msg) //mando paquete fantasma para que me envien mas paquetes a repartir
 				cont = 0
 			}
 			time.Sleep(1 * time.Second)
 		}
 	}()
-
-
 	<-waitc
 	stream.CloseSend()
 }

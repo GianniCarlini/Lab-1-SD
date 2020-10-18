@@ -46,7 +46,7 @@ func main() {
 	}
  //----------------------------------------------------------------------------------------------
 	nseguimiento = make(map[string]int64) //variable que contiene el id del producto y su respectivo id de seguimiento
-
+ //------------------------------ grpc ----------------------------------------------------------
 	// Set up a connection to the server.
 	conn, err := grpc.Dial(address, grpc.WithInsecure())
 	if err != nil {
@@ -204,7 +204,7 @@ func main() {
 			var codigo int64
 			fmt.Printf("ingrese su codigo: ")
 			fmt.Scanln(&codigo)
-			time.Sleep(1 * time.Second)
+			time.Sleep(1 * time.Second) //segundo de respuesta para alcanzar a leer en local
 
 
 			c2 := pb.NewPacketClient(conn)
@@ -213,7 +213,7 @@ func main() {
 			defer cancel()
 
 			
-			r, err := c2.Seguimiento(ctx, &pb.SeguimientoRequest{Codigo: codigo}) 
+			r, err := c2.Seguimiento(ctx, &pb.SeguimientoRequest{Codigo: codigo}) //envio el codigo
 			if err != nil {
 				log.Fatalf("could not greet: %v", err)
 			}
@@ -221,6 +221,7 @@ func main() {
 	default:
 		fmt.Println("Elija una opcion de las mencionadas")
 	}
+	fmt.Println("-----------------------------------------------------------------------------------------------------------------")
  }		
 	  
 }

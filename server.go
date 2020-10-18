@@ -8,7 +8,6 @@ import (
 	"time"
 	"fmt"
 	"reflect"
-	//"io/ioutil"
 	"os"
 	"encoding/csv"
 	"encoding/json"
@@ -27,10 +26,10 @@ const (
 // server is used to implement helloworld.GreeterServer.
 type server struct {
 }
-var seguimiento int64 = 0
-var seguimiento2 int64 = 0 
+var seguimiento int64 = 0 // variable para el codigo de seguimieto
+var seguimiento2 int64 = 0 // variable para el codigo de seguimieto
 var seguimiento3 int64 = 0// variable para el codigo de seguimieto
-var registros2 [][]string
+var registros2 [][]string // registro en memoria de paquetes
 
 
 type PaqueteCola struct{
@@ -50,7 +49,7 @@ var colanormal[] PaqueteCola
 func Remove(s []PaqueteCola, index int) []PaqueteCola {
 	return append(s[:index], s[index+1:]...)
 }
-//----------------------buscar-----------------------------------------------------------------
+//-------------------funcion buscar origen destino para enviar a camiones-------------------
 func Buscar(id string)(string, string){
 	for _,i:= range registros2{
 		if id==i[1]{
@@ -68,7 +67,7 @@ func GenerarEnvio() [6]PaqueteCola {
 		if (!(reflect.DeepEqual(enviocamion[3],aux))){ //compara si la cola esta vacia hasta los primeros 4 paquetes para camiones 1 y 2
 			break
 		}
-		for i := 0; i < 4 ; i++{
+		for i := 0; i < 4 ; i++{ //sino busco en los primeros 4 paquetes
 			if reflect.DeepEqual(enviocamion[i],p){
 				break
 			}
@@ -130,8 +129,8 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	Value := strconv.FormatInt(in.GetValor(), 10)
 	t := time.Now().Format("02-01-2006 15:04:05")
 	var registros []string
-	registros = append(registros, t,in.GetId(),in.GetTipo(),in.GetProducto(),Value,in.GetTienda(),in.GetDestino(),seg)
-	registros2 = append(registros2, registros)
+	registros = append(registros, t,in.GetId(),in.GetTipo(),in.GetProducto(),Value,in.GetTienda(),in.GetDestino(),seg) //registros de logistica en memoria
+	registros2 = append(registros2, registros) //arreglo 2D para guardar todos los registros
  //-----------------------------------escribiendo registro-----------------------------
 	file, err := os.OpenFile("retail.csv", os.O_CREATE|os.O_WRONLY, 0777)
     defer file.Close()
@@ -160,12 +159,9 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	}else{
 		colaretail= append(colaretail,reg)
 	}
-	fmt.Println(colanormal)  //borrar
-	fmt.Println(colaprioritario) //borrar
-	fmt.Println(colaretail) //borrar
   //-----------------------------------------------------------------------------------
 
-	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil
+	return &pb.PacketReply{Message: in.GetId(), Nseg: seguimiento3,}, nil //envio respuesta al cliente
 }
  //-----------------------------------servidor camiones---------------------------------
  func (s *server) Camion(stream pb.Packet_CamionServer) error {
@@ -176,8 +172,9 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 		if err != nil {
 			log.Fatalf("RPC failed: %v", err)
 		}
-		// aca va logica si el paquete es nulo pos xd sino borro lo que me enviaron y reenvio calculos
-		if r.Estado != int64(-9999){
+		// aca va logica si el paquete es nulo continuo sino borro las colas
+		if r.Estado != int64(-9999){ //si el paquete que envia camiones no es "fantasma" o estado -9999 realizo el borrado
+			fmt.Println("Paquetes recividos!")
 			//maximo 6 paquetes
 			entrega[contador] = PaqueteCola{
 				IdPaquete: r.IdPaquete,   
@@ -192,9 +189,10 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 				normal := "normal"
 				prioritario := "prioritario"
 				retail := "retail"
+				// borrado en los registros de colas de entregas completadas
 				for _,paquete := range entrega{
 					fmt.Println(paquete) //-------------------------no olvidar borrar------------------------------
-					if reflect.DeepEqual(paquete,PaqueteCola{Estado:1}){
+					if reflect.DeepEqual(paquete,PaqueteCola{Estado:1}){ //reviso si estado es 1 "en camino" para no tener errores
 						continue
 					}else{
 					if paquete.Tipo == normal{
@@ -227,9 +225,9 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 				}
 				contador = 0
 			}
-		}else{
+		}else{ //si el paquete es fantasma genero los 6 paquetes para los camiones
 			envio := GenerarEnvio() //genero los paquetes a enviar
-		
+			fmt.Println("Enviando paquetes a reparto!")
 			for _, paquetecamion:= range envio{
 				resp := pb.CamionReply{
 					IdPaquete: paquetecamion.IdPaquete,
@@ -239,7 +237,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 					Intentos: paquetecamion.Intentos,
 					Estado: 1,
 				}
-				if err := stream.Send(&resp); err != nil {
+				if err := stream.Send(&resp); err != nil { //envio los paquetes a camiones
 					log.Printf("send error %v", err)
 				}
 				

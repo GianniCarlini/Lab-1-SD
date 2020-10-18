@@ -23,13 +23,15 @@ type PaqueteCola struct{
 
 var completados int64
 var total float64
-//saco un paquete de la cola
+
+//------------funcion para calcular el total de entregas compeltadas----------------
 func CalculoCompletados(paquete PaqueteCola){
 	if paquete.Estado == 2{
 		completados +=1
 		fmt.Println("Me complete")
 	}
 }
+//------------calculo de ganancias por paquete-------------------------------------
 func GananciaPaquete(paquete PaqueteCola){
 	var ganancia float64
 
@@ -57,7 +59,8 @@ func GananciaPaquete(paquete PaqueteCola){
 
 
 func main(){
-	conn, err := amqp.Dial("amqp://mqadmin:mqadminpassword@localhost:5672/")
+//-----------------conexion de rabbit----------------------------------
+conn, err := amqp.Dial("amqp://mqadmin:mqadminpassword@localhost:5672/")
 failOnError(err, "Failed to connect to RabbitMQ")
 defer conn.Close()
 
@@ -92,9 +95,9 @@ msgs, err := ch.Consume(
 	for d := range msgs {
     log.Printf("Received a message: %s", d.Body)
 
-    var m PaqueteCola
+    var m PaqueteCola 
+    _ = json.Unmarshal(d.Body, &m) //hago el unmarshal y asigno lo que me llego a una variable m axiliar
 
-    _ = json.Unmarshal(d.Body, &m)
 
     fmt.Println(m)
 

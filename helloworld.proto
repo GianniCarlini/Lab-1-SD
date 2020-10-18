@@ -6,9 +6,9 @@ package helloworld;
 
 service Packet {
   // Sends a greeting
-  rpc SendPacket (PacketRequest) returns (PacketReply) {}
-  rpc Camion (stream CamionRequest) returns (stream CamionReply) {}
-  rpc Seguimiento (SeguimientoRequest) returns (SeguimientoReply) {}
+  rpc SendPacket (PacketRequest) returns (PacketReply) {} // para enviar paquetes entre cliente y logistica
+  rpc Camion (stream CamionRequest) returns (stream CamionReply) {} //para enviar paquetes entre logisitca y camiones
+  rpc Seguimiento (SeguimientoRequest) returns (SeguimientoReply) {} // para realizar el seguimiento de paquetes
   rpc Od (OdRequest) returns (OdReply) {} // para enviar la tienda y el destino a camiones ya que el formato anterior pedido no manda esos datos
 }
 
