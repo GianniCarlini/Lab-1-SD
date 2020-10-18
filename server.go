@@ -371,8 +371,8 @@ func main() {
 	}
 
 	s := grpc.NewServer()
-	
-	rabbit()
+
+	Rabbit()
 
 
 	pb.RegisterPacketServer(s, &server{})
