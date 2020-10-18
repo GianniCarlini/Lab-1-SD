@@ -366,7 +366,7 @@ func Rabbit(){
 		false,  // immediate
 		amqp.Publishing {
 		  ContentType: "application/json",
-		  Body:        []byte(body)
+		  Body:        []byte(body),
 		})
 	failOnError(err, "Failed to publish a message")
 
