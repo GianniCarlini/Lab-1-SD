@@ -95,6 +95,9 @@ msgs, err := ch.Consume(
     var m PaqueteCola
 
     _ = json.Unmarshal(d.Body, &m)
+
+    fmt.Println(m)
+
     CalculoCompletados(m)
     GananciaPaquete(m)
     fmt.Println(total)
