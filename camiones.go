@@ -2,12 +2,12 @@ package main
 
 import (
 	"context"
-	//"encoding/csv"
+	"encoding/csv"
 	"fmt"
 	//"io"
 	"log"
-	//"os"
-	//"strconv"
+	"os"
+	"strconv"
 	"time"
 	"math/rand"
 	"reflect"
@@ -28,6 +28,9 @@ type PaqueteCola struct{
 	estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 	fecha string
 }
+var camion1 [][] string
+var camion2 [][] string
+var camion3 [][] string
 
 func ordenar(p1 PaqueteCola, p2 PaqueteCola) (PaqueteCola, PaqueteCola){
 	if p1.valor < p2.valor {
@@ -87,7 +90,64 @@ func reparto(r [2]PaqueteCola)[2]PaqueteCola{
 	}
 	return r
 }
+func registrocamion(entrega [6]PaqueteCola){
+	conn, err := grpc.Dial(address, grpc.WithInsecure())
+		
+		if err != nil {
+			log.Fatalf("Conn err: %v", err)
+		}
+		c := pb.NewPacketClient(conn)
 
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+		defer cancel()
+
+	for i,p := range entrega{
+		var nombre string
+
+		r, err := c.Od(ctx, &pb.OdRequest{Id: p.id_paquete}) 
+		if err != nil {
+			log.Fatalf("could not greet: %v", err)
+		}
+		fmt.Println(r.GetOrigen())
+		fmt.Println(r.GetDestino())
+		reg:= []string{p.id_paquete,p.tipo,strconv.FormatInt(p.valor,10), r.GetOrigen(), r.GetDestino(),strconv.FormatInt(p.intentos,10),p.fecha}
+
+	if i == 0 || i == 1{
+		nombre = "rcamion1.csv"
+		camion1=append(camion1,reg)
+		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
+		defer file.Close()
+		if err !=nil{
+			os.Exit(1)
+		}
+		csvWriter:= csv.NewWriter(file)
+		csvWriter.WriteAll(camion1)
+		csvWriter.Flush()
+	}else if i == 2 || i == 3 {
+		nombre = "rcamion2.csv"
+		camion2=append(camion2,reg)
+		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
+		defer file.Close()
+		if err !=nil{
+			os.Exit(1)
+		}
+		csvWriter:= csv.NewWriter(file)
+		csvWriter.WriteAll(camion2)
+		csvWriter.Flush()
+	}else if i == 4 || i == 5 {
+		nombre ="rcamion3.csv"
+		camion3=append(camion3,reg)
+		file,err:= os.OpenFile(nombre,os.O_CREATE|os.O_WRONLY,0777)
+		defer file.Close()
+		if err !=nil{
+			os.Exit(1)
+		}
+		csvWriter:= csv.NewWriter(file)
+		csvWriter.WriteAll(camion3)
+		csvWriter.Flush()
+		}
+	}
+}
 func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	package1,package2 := ordenar(envios[0],envios[1]) //ordenos envios camion 1
 	package3,package4 := ordenar(envios[2],envios[3])
@@ -100,7 +160,20 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	camionretail1 = reparto(camionretail1)
 	camionretail2 = reparto(camionretail2)
 	camionnormal = reparto(camionnormal)
-	resultado := [6]PaqueteCola{camionretail1[0],camionretail1[1], camionretail2[0], camionretail2[1], camionnormal[0], camionnormal[1]} 
+	entrega := [6]PaqueteCola{camionretail1[0],camionretail1[1], camionretail2[0], camionretail2[1], camionnormal[0], camionnormal[1]} 
+ //--------------------------------------------------------------------------------------------------------------------------
+	registrocamion(entrega)
+	/*c := pb.NewPacketClient(conn)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+
+	r, err := c.Od(ctx, &pb.OdRequest{Id: codigo}) 
+	if err != nil {
+		log.Fatalf("could not greet: %v", err)
+	}
+	fmt.Println(r.)*/
 	//------------------------aca tengo que escribir los registros-------------------------
 	/*var registros13 [][]string
 	file3, err := os.OpenFile("rcamion1.csv", os.O_CREATE|os.O_WRONLY, 0777)
@@ -166,7 +239,7 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 	registros33 = nil*/
 	//----------------------------------------------------------------------
 
-	return resultado
+	return entrega
 }
 
 func main() {

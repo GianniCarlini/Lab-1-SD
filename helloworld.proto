@@ -9,6 +9,7 @@ service Packet {
   rpc SendPacket (PacketRequest) returns (PacketReply) {}
   rpc Camion (stream CamionRequest) returns (stream CamionReply) {}
   rpc Seguimiento (SeguimientoRequest) returns (SeguimientoReply) {}
+  rpc Od (OdRequest) returns (OdReply) {} // para enviar la tienda y el destino a camiones ya que el formato anterior pedido no manda esos datos
 }
 
 
@@ -28,7 +29,7 @@ message PacketReply {
   string message = 1;
   int64 nseg = 2;
 }
-
+//----------------------------------------------------------
 message CamionRequest {
     string id_paquete = 1;
     int64 seguimiento = 2;
@@ -38,7 +39,6 @@ message CamionRequest {
     int64 estado = 6;
 }
 
-// The response message containing the greetings
 message CamionReply {
     string id_paquete = 1;
     int64 seguimiento = 2;
@@ -47,7 +47,7 @@ message CamionReply {
     int64 intentos = 5;
     int64 estado = 6;
 }
-
+//-----------------------------------------------------------
 message SeguimientoRequest {
   int64 codigo = 1;
 }
@@ -55,4 +55,14 @@ message SeguimientoRequest {
 
 message SeguimientoReply {
   string estadoseguimiento = 1;
+}
+//-----------------------------------------------------------
+message OdRequest {
+  string id = 1;
+}
+
+
+message OdReply {
+  string origen = 1;
+  string destino = 2;
 }

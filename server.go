@@ -47,6 +47,15 @@ var colanormal[] PaqueteCola
 func Remove(s []PaqueteCola, index int) []PaqueteCola {
 	return append(s[:index], s[index+1:]...)
 }
+//----------------------buscar-----------------------------------------------------------------
+func Buscar(id string)(string, string){
+	for _,i:= range registros2{
+		if id==i[1]{
+			return i[5],i[6]
+		}
+	}
+	return "",""
+}
 //------------------------------ generar paquetes para camiones-------------------------------
 func GenerarEnvio() [6]PaqueteCola {
 	var enviocamion [6]PaqueteCola //6 paquetes que se envian al camion
@@ -240,6 +249,22 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	
 	
 }
+func (s *server) Od(ctx context.Context, msg *pb.OdRequest) (*pb.OdReply, error){
+
+	id := msg.GetId()
+
+	var ori string
+	var dest string
+
+	if id != "" {
+		ori, dest = Buscar(id)
+	}
+	return &pb.OdReply {
+		Origen: ori,
+		Destino: dest,
+	}, nil
+
+}
 func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*pb.SeguimientoReply, error) {
 	log.Printf("Received: %v", in.GetCodigo())
 	esta2 := "xd"
@@ -292,7 +317,7 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 	if esta2 == "xd"{
 		esta2 = "No esta en sistema"
 	}
-	
+
 	return &pb.SeguimientoReply{Estadoseguimiento: esta2,}, nil
 }
 

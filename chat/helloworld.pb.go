@@ -173,6 +173,7 @@ func (x *PacketReply) GetNseg() int64 {
 	return 0
 }
 
+//----------------------------------------------------------
 type CamionRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -260,7 +261,6 @@ func (x *CamionRequest) GetEstado() int64 {
 	return 0
 }
 
-// The response message containing the greetings
 type CamionReply struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -348,6 +348,7 @@ func (x *CamionReply) GetEstado() int64 {
 	return 0
 }
 
+//-----------------------------------------------------------
 type SeguimientoRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -442,6 +443,109 @@ func (x *SeguimientoReply) GetEstadoseguimiento() string {
 	return ""
 }
 
+//-----------------------------------------------------------
+type OdRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+}
+
+func (x *OdRequest) Reset() {
+	*x = OdRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_helloworld_proto_msgTypes[6]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OdRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OdRequest) ProtoMessage() {}
+
+func (x *OdRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_helloworld_proto_msgTypes[6]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OdRequest.ProtoReflect.Descriptor instead.
+func (*OdRequest) Descriptor() ([]byte, []int) {
+	return file_helloworld_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *OdRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type OdReply struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Origen  string `protobuf:"bytes,1,opt,name=origen,proto3" json:"origen,omitempty"`
+	Destino string `protobuf:"bytes,2,opt,name=destino,proto3" json:"destino,omitempty"`
+}
+
+func (x *OdReply) Reset() {
+	*x = OdReply{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_helloworld_proto_msgTypes[7]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *OdReply) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OdReply) ProtoMessage() {}
+
+func (x *OdReply) ProtoReflect() protoreflect.Message {
+	mi := &file_helloworld_proto_msgTypes[7]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OdReply.ProtoReflect.Descriptor instead.
+func (*OdReply) Descriptor() ([]byte, []int) {
+	return file_helloworld_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *OdReply) GetOrigen() string {
+	if x != nil {
+		return x.Origen
+	}
+	return ""
+}
+
+func (x *OdReply) GetDestino() string {
+	if x != nil {
+		return x.Destino
+	}
+	return ""
+}
+
 var File_helloworld_proto protoreflect.FileDescriptor
 
 var file_helloworld_proto_rawDesc = []byte{
@@ -489,21 +593,30 @@ var file_helloworld_proto_rawDesc = []byte{
 	0x74, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x2c, 0x0a, 0x11, 0x65, 0x73, 0x74, 0x61, 0x64,
 	0x6f, 0x73, 0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f, 0x18, 0x01, 0x20, 0x01,
 	0x28, 0x09, 0x52, 0x11, 0x65, 0x73, 0x74, 0x61, 0x64, 0x6f, 0x73, 0x65, 0x67, 0x75, 0x69, 0x6d,
-	0x69, 0x65, 0x6e, 0x74, 0x6f, 0x32, 0xdf, 0x01, 0x0a, 0x06, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74,
-	0x12, 0x42, 0x0a, 0x0a, 0x53, 0x65, 0x6e, 0x64, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x19,
-	0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x50, 0x61, 0x63, 0x6b,
-	0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c,
-	0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x70,
-	0x6c, 0x79, 0x22, 0x00, 0x12, 0x42, 0x0a, 0x06, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x12, 0x19,
-	0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x43, 0x61, 0x6d, 0x69,
-	0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c,
-	0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70,
-	0x6c, 0x79, 0x22, 0x00, 0x28, 0x01, 0x30, 0x01, 0x12, 0x4d, 0x0a, 0x0b, 0x53, 0x65, 0x67, 0x75,
-	0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f, 0x12, 0x1e, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77,
-	0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x53, 0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f,
-	0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x1c, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77,
-	0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x53, 0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f,
-	0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x69, 0x65, 0x6e, 0x74, 0x6f, 0x22, 0x1b, 0x0a, 0x09, 0x4f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65,
+	0x73, 0x74, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02,
+	0x69, 0x64, 0x22, 0x3b, 0x0a, 0x07, 0x4f, 0x64, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x12, 0x16, 0x0a,
+	0x06, 0x6f, 0x72, 0x69, 0x67, 0x65, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x6f,
+	0x72, 0x69, 0x67, 0x65, 0x6e, 0x12, 0x18, 0x0a, 0x07, 0x64, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x6f,
+	0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x64, 0x65, 0x73, 0x74, 0x69, 0x6e, 0x6f, 0x32,
+	0x93, 0x02, 0x0a, 0x06, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x42, 0x0a, 0x0a, 0x53, 0x65,
+	0x6e, 0x64, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x12, 0x19, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f,
+	0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64,
+	0x2e, 0x50, 0x61, 0x63, 0x6b, 0x65, 0x74, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x12, 0x42,
+	0x0a, 0x06, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x12, 0x19, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f,
+	0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x71, 0x75,
+	0x65, 0x73, 0x74, 0x1a, 0x17, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64,
+	0x2e, 0x43, 0x61, 0x6d, 0x69, 0x6f, 0x6e, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22, 0x00, 0x28, 0x01,
+	0x30, 0x01, 0x12, 0x4d, 0x0a, 0x0b, 0x53, 0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74,
+	0x6f, 0x12, 0x1e, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x53,
+	0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73,
+	0x74, 0x1a, 0x1c, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x53,
+	0x65, 0x67, 0x75, 0x69, 0x6d, 0x69, 0x65, 0x6e, 0x74, 0x6f, 0x52, 0x65, 0x70, 0x6c, 0x79, 0x22,
+	0x00, 0x12, 0x32, 0x0a, 0x02, 0x4f, 0x64, 0x12, 0x15, 0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77,
+	0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x4f, 0x64, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x1a, 0x13,
+	0x2e, 0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x77, 0x6f, 0x72, 0x6c, 0x64, 0x2e, 0x4f, 0x64, 0x52, 0x65,
+	0x70, 0x6c, 0x79, 0x22, 0x00, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -518,7 +631,7 @@ func file_helloworld_proto_rawDescGZIP() []byte {
 	return file_helloworld_proto_rawDescData
 }
 
-var file_helloworld_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_helloworld_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_helloworld_proto_goTypes = []interface{}{
 	(*PacketRequest)(nil),      // 0: helloworld.PacketRequest
 	(*PacketReply)(nil),        // 1: helloworld.PacketReply
@@ -526,16 +639,20 @@ var file_helloworld_proto_goTypes = []interface{}{
 	(*CamionReply)(nil),        // 3: helloworld.CamionReply
 	(*SeguimientoRequest)(nil), // 4: helloworld.SeguimientoRequest
 	(*SeguimientoReply)(nil),   // 5: helloworld.SeguimientoReply
+	(*OdRequest)(nil),          // 6: helloworld.OdRequest
+	(*OdReply)(nil),            // 7: helloworld.OdReply
 }
 var file_helloworld_proto_depIdxs = []int32{
 	0, // 0: helloworld.Packet.SendPacket:input_type -> helloworld.PacketRequest
 	2, // 1: helloworld.Packet.Camion:input_type -> helloworld.CamionRequest
 	4, // 2: helloworld.Packet.Seguimiento:input_type -> helloworld.SeguimientoRequest
-	1, // 3: helloworld.Packet.SendPacket:output_type -> helloworld.PacketReply
-	3, // 4: helloworld.Packet.Camion:output_type -> helloworld.CamionReply
-	5, // 5: helloworld.Packet.Seguimiento:output_type -> helloworld.SeguimientoReply
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
+	6, // 3: helloworld.Packet.Od:input_type -> helloworld.OdRequest
+	1, // 4: helloworld.Packet.SendPacket:output_type -> helloworld.PacketReply
+	3, // 5: helloworld.Packet.Camion:output_type -> helloworld.CamionReply
+	5, // 6: helloworld.Packet.Seguimiento:output_type -> helloworld.SeguimientoReply
+	7, // 7: helloworld.Packet.Od:output_type -> helloworld.OdReply
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -619,6 +736,30 @@ func file_helloworld_proto_init() {
 				return nil
 			}
 		}
+		file_helloworld_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OdRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_helloworld_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*OdReply); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -626,7 +767,7 @@ func file_helloworld_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_helloworld_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
@@ -656,6 +797,7 @@ type PacketClient interface {
 	SendPacket(ctx context.Context, in *PacketRequest, opts ...grpc.CallOption) (*PacketReply, error)
 	Camion(ctx context.Context, opts ...grpc.CallOption) (Packet_CamionClient, error)
 	Seguimiento(ctx context.Context, in *SeguimientoRequest, opts ...grpc.CallOption) (*SeguimientoReply, error)
+	Od(ctx context.Context, in *OdRequest, opts ...grpc.CallOption) (*OdReply, error)
 }
 
 type packetClient struct {
@@ -715,12 +857,22 @@ func (c *packetClient) Seguimiento(ctx context.Context, in *SeguimientoRequest, 
 	return out, nil
 }
 
+func (c *packetClient) Od(ctx context.Context, in *OdRequest, opts ...grpc.CallOption) (*OdReply, error) {
+	out := new(OdReply)
+	err := c.cc.Invoke(ctx, "/helloworld.Packet/Od", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PacketServer is the server API for Packet service.
 type PacketServer interface {
 	// Sends a greeting
 	SendPacket(context.Context, *PacketRequest) (*PacketReply, error)
 	Camion(Packet_CamionServer) error
 	Seguimiento(context.Context, *SeguimientoRequest) (*SeguimientoReply, error)
+	Od(context.Context, *OdRequest) (*OdReply, error)
 }
 
 // UnimplementedPacketServer can be embedded to have forward compatible implementations.
@@ -735,6 +887,9 @@ func (*UnimplementedPacketServer) Camion(Packet_CamionServer) error {
 }
 func (*UnimplementedPacketServer) Seguimiento(context.Context, *SeguimientoRequest) (*SeguimientoReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Seguimiento not implemented")
+}
+func (*UnimplementedPacketServer) Od(context.Context, *OdRequest) (*OdReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Od not implemented")
 }
 
 func RegisterPacketServer(s *grpc.Server, srv PacketServer) {
@@ -803,6 +958,24 @@ func _Packet_Seguimiento_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Packet_Od_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OdRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PacketServer).Od(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/helloworld.Packet/Od",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PacketServer).Od(ctx, req.(*OdRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _Packet_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "helloworld.Packet",
 	HandlerType: (*PacketServer)(nil),
@@ -814,6 +987,10 @@ var _Packet_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Seguimiento",
 			Handler:    _Packet_Seguimiento_Handler,
+		},
+		{
+			MethodName: "Od",
+			Handler:    _Packet_Od_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
