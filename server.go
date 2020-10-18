@@ -10,9 +10,9 @@ import (
 	"reflect"
 	"os"
 	"encoding/csv"
-//	"encoding/json"
+	"encoding/json"
 
-//	"github.com/streadway/amqp"
+	"github.com/streadway/amqp"
 
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
