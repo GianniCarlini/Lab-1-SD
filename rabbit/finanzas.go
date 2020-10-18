@@ -12,7 +12,8 @@ func failOnError(err error, msg string) {
   }
 }
 
-conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+func main(){
+	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
 failOnError(err, "Failed to connect to RabbitMQ")
 defer conn.Close()
 
@@ -51,3 +52,4 @@ msgs, err := ch.Consume(
   
   log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
   <-forever
+}
