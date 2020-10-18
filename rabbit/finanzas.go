@@ -2,7 +2,8 @@ package main
 
 import (
   "log"
-
+  "fmt"
+  "encoding/json"
   "github.com/streadway/amqp"
 )
 
@@ -94,8 +95,8 @@ msgs, err := ch.Consume(
     var m PaqueteCola
 
     _ = json.Unmarshal(d.Body, &m)
-    CalculoCompletados(aux)
-    GananciaPaquete(aux)
+    CalculoCompletados(m)
+    GananciaPaquete(m)
     fmt.Println(total)
 	}
   }()
