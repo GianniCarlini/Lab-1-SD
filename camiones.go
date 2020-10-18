@@ -222,8 +222,8 @@ func main() {
 			cont += 1
 			if cont > 5{ // me llegaron 6 paquetes hago similacion
 				cont = 0
-				r = simulacion(colaenvios)
 				fmt.Println("Haciendo Reparto")
+				r = simulacion(colaenvios)
 				for _, pp := range r{
 					m := &pb.CamionRequest{
 						IdPaquete: pp.id_paquete,   

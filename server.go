@@ -352,11 +352,8 @@ func Rabbit(){
 		Estado:2,
 		}
 
-	fmt.Println(aux)
 
 	body, _ := json.Marshal(aux)
-	
-	fmt.Println(string(body))
 
 	err = ch.Publish(
 		"",     // exchange
