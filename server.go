@@ -359,6 +359,8 @@ func Rabbit(){
 
 	body, _ := json.Marshal(aux)
 	
+	fmt.Println(string(body))
+
 	err = ch.Publish(
 		"",     // exchange
 		q.Name, // routing key
