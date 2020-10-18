@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	address = "localhost:50051"
+	address = "10.10.28.68:50051"
 )
 type PaqueteCola struct{
 	id_paquete string
@@ -173,7 +173,7 @@ func simulacion(envios [6]PaqueteCola)[6]PaqueteCola{
 }
 
 func main() {
-	fmt.Println("Ingrese el ")
+	fmt.Println("Ingrese el tiempo de espera:")
 	fmt.Scanln(&sleeptime)
 
 	var colaenvios[6]PaqueteCola //max 6 paquetes para los camiones, cola para asignacion en planta(?)
