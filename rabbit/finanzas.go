@@ -23,6 +23,7 @@ type PaqueteCola struct{
 
 var completados int64
 var total float64
+var registros2 [][]string
 
 //------------funcion para calcular el total de entregas compeltadas----------------
 func CalculoCompletados(paquete PaqueteCola){
@@ -32,7 +33,7 @@ func CalculoCompletados(paquete PaqueteCola){
 	}
 }
 //------------calculo de ganancias por paquete-------------------------------------
-func GananciaPaquete(paquete PaqueteCola){
+func GananciaPaquete(paquete PaqueteCola)(float64){
 	var ganancia float64
 
 	valor := float64(paquete.Valor)
@@ -54,7 +55,8 @@ func GananciaPaquete(paquete PaqueteCola){
 		ganancia = valor-((intentos-1)*10)
 	}
 	fmt.Println("tengo esto de ganancia: %v",ganancia)
-	total += ganancia
+  total += ganancia
+  return ganacia
 }
 
 
@@ -102,11 +104,32 @@ msgs, err := ch.Consume(
     fmt.Println(m)
 
     CalculoCompletados(m)
-    GananciaPaquete(m)
+    var ganancia float64
+    ganancia = GananciaPaquete(m)
+    
+    var estadito string
+    if m.Estado == 2{
+      estadito = "Recibido"
+    }else{
+      estadito = "No Recibido"
+    }
+    var registros []string
+    registros = append(registros, m.IdPaquete, m.Intentos, estadito, ganancia) //registros de logistica en memoria
+    registros2 = append(registros2, registros)
+    //--------escribo en un archivo las ganancias y tambien las llevo en memoria sigo pdf y pauta--------------------
+    file, err := os.OpenFile("finanzas.csv", os.O_CREATE|os.O_WRONLY, 0777)
+    defer file.Close()
+ 
+    if err != nil {
+        os.Exit(1)
+    }
+    csvWriter := csv.NewWriter(file)
+    strWrite := registros2
+    csvWriter.WriteAll(strWrite)
+	  csvWriter.Flush()
     fmt.Println(total)
 	}
   }()
-  
   log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
   <-forever
 }
