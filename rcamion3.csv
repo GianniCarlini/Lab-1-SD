@@ -1,13 +1,13 @@
-BE127,prioritario,15,pyme,casa-K,0,17-10-2020 21:40:45
-BE666,prioritario,8,pyme,casa-A,0,17-10-2020 21:40:45
-PF654,prioritario,50,pyme,casa-B,0,17-10-2020 21:40:51
-BE785,prioritario,8,pyme,casa-E,0,17-10-2020 21:40:51
-PF225,prioritario,25,pyme,casa-P,0,17-10-2020 21:40:57
-PF111,prioritario,10,pyme,casa-N,2,
-PF452,prioritario,115,pyme,casa-I,0,17-10-2020 21:41:03
-OF352,prioritario,9,pyme,casa-C,0,17-10-2020 21:41:03
-DE786,prioritario,15,pyme,casa-Z,0,17-10-2020 21:41:09
-DE654,prioritario,11,pyme,casa-V,0,17-10-2020 21:41:09
+BE127,prioritario,15,pyme,casa-K,0,18-10-2020 14:44:47
+BE666,prioritario,8,pyme,casa-A,1,
+PF654,prioritario,50,pyme,casa-B,0,18-10-2020 14:44:53
+BE785,prioritario,8,pyme,casa-E,0,18-10-2020 14:44:53
+PF225,prioritario,25,pyme,casa-P,0,18-10-2020 14:44:59
+PF111,prioritario,10,pyme,casa-N,1,18-10-2020 14:44:59
+PF452,prioritario,115,pyme,casa-I,0,18-10-2020 14:45:05
+OF352,prioritario,9,pyme,casa-C,0,18-10-2020 14:45:05
+DE786,prioritario,15,pyme,casa-Z,0,18-10-2020 14:45:11
+DE654,prioritario,11,pyme,casa-V,0,18-10-2020 14:45:11
 BE855,normal,10,pyme,casa-A,1,17-10-2020 21:41:15
 GG458,prioritario,3,pyme,casa-C,0,17-10-2020 21:41:15
 458,prioritario,3,origen,destino,0,17-10-2020 21:21:23

@@ -12,7 +12,7 @@ import (
 	"os"
 	"encoding/csv"
 
-	"github.com/streadway/amqp"
+	//"github.com/streadway/amqp"
 
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
@@ -33,12 +33,12 @@ var registros2 [][]string
 
 
 type PaqueteCola struct{
-	id_paquete string
-	seguimiento int64
-	tipo string
-	valor int64
-	intentos int64
-	estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
+	IdPaquete string
+	Seguimiento int64
+	Tipo string
+	Valor int64
+	Intentos int64
+	Estado int64 //0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 }
 
 var finanzas[] PaqueteCola
@@ -144,12 +144,12 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 	csvWriter.Flush()
   //---------------------------------------------colas----------------------------------
 	reg := PaqueteCola{
-		id_paquete : in.GetId(),
-		seguimiento : seguimiento3,
-		tipo : in.GetTipo(),
-		valor : in.GetValor(),
-		intentos : 0,
-		estado : 0,
+		IdPaquete : in.GetId(),
+		Seguimiento : seguimiento3,
+		Tipo : in.GetTipo(),
+		Valor : in.GetValor(),
+		Intentos : 0,
+		Estado : 0,
 	}
 
 	if in.GetTipo() == normal {
@@ -179,12 +179,12 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 		if r.Estado != int64(-9999){
 			//maximo 6 paquetes
 			entrega[contador] = PaqueteCola{
-				id_paquete: r.IdPaquete,   
-				seguimiento: r.Seguimiento,
-				tipo: r.Tipo,        
-				valor: r.Valor,       
-				intentos: r.Intentos,    
-				estado: r.Estado,	
+				IdPaquete: r.IdPaquete,   
+				Seguimiento: r.Seguimiento,
+				Tipo: r.Tipo,        
+				Valor: r.Valor,       
+				Intentos: r.Intentos,    
+				Estado: r.Estado,	
 			}
 			contador += 1
 			if contador == 6{//cuando recepcione los 6 paquetes
@@ -193,29 +193,29 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 				retail := "retail"
 				for _,paquete := range entrega{
 					fmt.Println(paquete) //-------------------------no olvidar borrar------------------------------
-					if reflect.DeepEqual(paquete,PaqueteCola{estado:1}){
+					if reflect.DeepEqual(paquete,PaqueteCola{Estado:1}){
 						continue
 					}else{
-					if paquete.tipo == normal{
+					if paquete.Tipo == normal{
 						for i,paquetecolanormal := range colanormal{
-							if paquete.id_paquete == paquetecolanormal.id_paquete{
+							if paquete.IdPaquete == paquetecolanormal.IdPaquete{
 								//borro
 								colanormal = Remove(colanormal,i)
 								break
 							}
 						}
 					}
-					if paquete.tipo == prioritario{
+					if paquete.Tipo == prioritario{
 						for i,paquetecolaprioritario := range colaprioritario{
-							if paquete.id_paquete == paquetecolaprioritario.id_paquete{
+							if paquete.IdPaquete == paquetecolaprioritario.IdPaquete{
 								colaprioritario = Remove(colaprioritario,i)
 								break
 							}
 						}
 					}
-					if paquete.tipo == retail{
+					if paquete.Tipo == retail{
 						for i,paquetecolaretail := range colaretail{
-							if paquete.id_paquete == paquetecolaretail.id_paquete{
+							if paquete.IdPaquete == paquetecolaretail.IdPaquete{
 								colaretail = Remove(colaretail,i)
 								break
 							}
@@ -231,11 +231,11 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 		
 			for _, paquetecamion:= range envio{
 				resp := pb.CamionReply{
-					IdPaquete: paquetecamion.id_paquete,
-					Seguimiento: paquetecamion.seguimiento,
-					Tipo: paquetecamion.tipo,
-					Valor: paquetecamion.valor,
-					Intentos: paquetecamion.intentos,
+					IdPaquete: paquetecamion.IdPaquete,
+					Seguimiento: paquetecamion.Seguimiento,
+					Tipo: paquetecamion.Tipo,
+					Valor: paquetecamion.Valor,
+					Intentos: paquetecamion.Intentos,
 					Estado: 1,
 				}
 				if err := stream.Send(&resp); err != nil {
@@ -271,14 +271,14 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 	log.Printf("Received: %v", in.GetCodigo())
 	esta2 := "xd"
 	for _,codigo := range finanzas{
-		if in.GetCodigo() == codigo.seguimiento{
+		if in.GetCodigo() == codigo.Seguimiento{
 			fmt.Println("soy completado")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
-			if codigo.estado == 0{
+			if codigo.Estado == 0{
 				esta2 = "En bodega"
-			}else if codigo.estado == 1{
+			}else if codigo.Estado == 1{
 				esta2 = "En Camino"
-			}else if codigo.estado == 2{
+			}else if codigo.Estado == 2{
 				esta2 = "Recibido "
 			}else{
 				esta2 = "No Recibido"
@@ -287,14 +287,14 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 		}
 	}
 	for _,codigo := range colanormal{
-		if in.GetCodigo() == codigo.seguimiento{
+		if in.GetCodigo() == codigo.Seguimiento{
 			fmt.Println("soy colanormal")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
-			if codigo.estado == 0{
+			if codigo.Estado == 0{
 				esta2 = "En bodega"
-			}else if codigo.estado == 1{
+			}else if codigo.Estado == 1{
 				esta2 = "En Camino"
-			}else if codigo.estado == 2{
+			}else if codigo.Estado == 2{
 				esta2 = "Recibido "
 			}else{
 				esta2 = "No Recibido"
@@ -302,14 +302,14 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 		}
 	}
 	for _,codigo := range colaprioritario{
-		if in.GetCodigo() == codigo.seguimiento{
+		if in.GetCodigo() == codigo.Seguimiento{
 			fmt.Println("soy colaprioritario")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
-			if codigo.estado == 0{
+			if codigo.Estado == 0{
 				esta2 = "En bodega"
-			}else if codigo.estado == 1{
+			}else if codigo.Estado == 1{
 				esta2 = "En Camino"
-			}else if codigo.estado == 2{
+			}else if codigo.Estado == 2{
 				esta2 = "Recibido "
 			}else{
 				esta2 = "No Recibido"
@@ -347,16 +347,26 @@ func Rabbit(){
 	)
 	failOnError(err, "Failed to declare a queue")
 
-	body := "Hello World!"
+	aux := PaqueteCola{
+		IdPaquete: "a",
+		Seguimiento: 10,
+		Tipo: "prioritario",
+		Valor: 10,
+		Intentos:1,
+		Estado:2,
+		}
+
+	body, _ := json.Marshal(aux)
+	
 	err = ch.Publish(
-  	"",     // exchange
-  	q.Name, // routing key	
-  	false,  // mandatory
-  	false,  // immediate
-  	amqp.Publishing {
-    	ContentType: "text/plain",
-	    Body:        []byte(body),
-  	})
+		"",     // exchange
+		q.Name, // routing key
+		false,  // mandatory
+		false,  // immediate
+		amqp.Publishing {
+		  ContentType: "application/json",
+		  Body:        []byte(body)
+		})
 	failOnError(err, "Failed to publish a message")
 
 	fmt.Println("Successfully Published Message yto Queue")
@@ -372,7 +382,7 @@ func main() {
 
 	s := grpc.NewServer()
 
-	Rabbit()
+	//Rabbit()
 
 
 	pb.RegisterPacketServer(s, &server{})

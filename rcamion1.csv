@@ -1,13 +1,14 @@
-SA1684AH,retail,12,tienda-B,casa-B,0,17-10-2020 21:40:45
-SA1554KF,retail,10,tienda-A,casa-A,0,17-10-2020 21:40:45
-SA1589GD,retail,100,tienda-B,casa-Q,0,17-10-2020 21:40:51
-SA8859SS,retail,15,tienda-C,casa-A,0,17-10-2020 21:40:51
-SA3574FG,retail,120,tienda-B,casa-U,0,17-10-2020 21:40:57
-SA1597EF,retail,20,tienda-A,casa-F,0,17-10-2020 21:40:57
-SA5648AA,retail,80,tienda-B,casa-A,0,17-10-2020 21:41:03
-SA1937JH,retail,6,tienda-C,casa-N,0,17-10-2020 21:41:03
-SA5974AA,retail,105,tienda-C,casa-C,1,17-10-2020 21:41:09
-SA6644DS,retail,30,tienda-A,casa-A,0,17-10-2020 21:41:09
+SA1684AH,retail,12,tienda-B,casa-B,1,18-10-2020 14:44:47
+SA1554KF,retail,10,tienda-A,casa-A,0,18-10-2020 14:44:47
+SA1589GD,retail,100,tienda-B,casa-Q,0,18-10-2020 14:44:53
+SA8859SS,retail,15,tienda-C,casa-A,3,
+SA3574FG,retail,120,tienda-B,casa-U,2,18-10-2020 14:44:59
+SA1597EF,retail,20,tienda-A,casa-F,0,18-10-2020 14:44:59
+SA5648AA,retail,80,tienda-B,casa-A,0,18-10-2020 14:45:05
+SA1937JH,retail,6,tienda-C,casa-N,1,18-10-2020 14:45:05
+SA5974AA,retail,105,tienda-C,casa-C,1,18-10-2020 14:45:11
+SA6644DS,retail,30,tienda-A,casa-A,2,18-10-2020 14:45:11
+7-10-2020 21:41:09
 DE245,prioritario,18,pyme,casa-Y,0,17-10-2020 21:41:15
 CC147,prioritario,11,pyme,casa-C,0,17-10-2020 21:41:15
 origen,destino,0,
