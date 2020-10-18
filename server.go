@@ -271,7 +271,6 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 	esta2 := "xd"
 	for _,codigo := range finanzas{
 		if in.GetCodigo() == codigo.Seguimiento{
-			fmt.Println("soy completado")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 			if codigo.Estado == 0{
 				esta2 = "En bodega"
@@ -287,7 +286,6 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 	}
 	for _,codigo := range colanormal{
 		if in.GetCodigo() == codigo.Seguimiento{
-			fmt.Println("soy colanormal")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 			if codigo.Estado == 0{
 				esta2 = "En bodega"
@@ -302,7 +300,6 @@ func (s *server) Seguimiento(ctx context.Context, in *pb.SeguimientoRequest) (*p
 	}
 	for _,codigo := range colaprioritario{
 		if in.GetCodigo() == codigo.Seguimiento{
-			fmt.Println("soy colaprioritario")
 			//0: En bodega / 1: En Camino / 2: Recibido / 3: No Recibido
 			if codigo.Estado == 0{
 				esta2 = "En bodega"

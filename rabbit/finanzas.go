@@ -5,6 +5,9 @@ import (
   "fmt"
   "encoding/json"
   "github.com/streadway/amqp"
+  "os"
+  "strconv"
+  "encoding/csv"
 )
 
 func failOnError(err error, msg string) {
@@ -56,7 +59,7 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
 	}
 	fmt.Println("tengo esto de ganancia: %v",ganancia)
   total += ganancia
-  return ganacia
+  return ganancia
 }
 
 
@@ -106,6 +109,8 @@ msgs, err := ch.Consume(
     CalculoCompletados(m)
     var ganancia float64
     ganancia = GananciaPaquete(m)
+
+    gana := strconv.ParseFloat(ganancia, 32)
     
     var estadito string
     if m.Estado == 2{
@@ -114,7 +119,10 @@ msgs, err := ch.Consume(
       estadito = "No Recibido"
     }
     var registros []string
-    registros = append(registros, m.IdPaquete, m.Intentos, estadito, ganancia) //registros de logistica en memoria
+
+    intentitos := strconv.FormatInt(m.Intentos, 10)
+
+    registros = append(registros, m.IdPaquete, intentitos, estadito, gana) //registros de logistica en memoria
     registros2 = append(registros2, registros)
     //--------escribo en un archivo las ganancias y tambien las llevo en memoria sigo pdf y pauta--------------------
     file, err := os.OpenFile("finanzas.csv", os.O_CREATE|os.O_WRONLY, 0777)
