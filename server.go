@@ -13,7 +13,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 
-	//"github.com/streadway/amqp"
+	"github.com/streadway/amqp"
 
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
@@ -374,7 +374,7 @@ func Rabbit(){
 		})
 	failOnError(err, "Failed to publish a message")
 
-	fmt.Println("Successfully Published Message yto Queue")
+	fmt.Println("Successfully Published Message to Queue")
 }
 
 func main() {
