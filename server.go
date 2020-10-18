@@ -365,24 +365,21 @@ func Rabbit(){
 func main() {
 	fmt.Println("Bienvenido al servidor de logistica de PrestigioExpress")
 	lis, err := net.Listen("tcp", port)
-	lis2, err := net.Listen("tcp", port2)
-
 
 	if err != nil {
 		log.Fatalf("failed to listen: %v", err)
 	}
 
 	s := grpc.NewServer()
+	
+	rabbit()
+
+
 	pb.RegisterPacketServer(s, &server{})
 
-	rabbit()
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}
-	if err := s.Serve(lis2); err != nil {
-		log.Fatalf("failed to serve: %v", err)
-	}
-
 	//------------------------------------------------------
 
 
