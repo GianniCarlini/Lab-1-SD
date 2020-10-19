@@ -342,15 +342,6 @@ func Rabbit(){
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-
-	aux := PaqueteCola{
-		IdPaquete: "a",
-		Seguimiento: 10,
-		Tipo: "prioritario",
-		Valor: 10,
-		Intentos:1,
-		Estado:2,
-		}
 	for _,p := range finanzas{
 		body, _ := json.Marshal(p)
 
