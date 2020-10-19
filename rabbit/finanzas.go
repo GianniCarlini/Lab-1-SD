@@ -34,7 +34,6 @@ var registros2 [][]string
 func CalculoCompletados(paquete PaqueteCola){
 	if paquete.Estado == 2{
 		completados +=1
-		fmt.Println("Me complete")
 	}
 }
 //------------calculo de ganancias por paquete-------------------------------------
@@ -146,6 +145,7 @@ msgs, err := ch.Consume(
 	  csvWriter.Flush()
     fmt.Println("Ganancia hasta el momento: %f",ganaciasglobal)
     fmt.Println("Perdida hasta el momento: %f",perdidatotal)
+    fmt.Println("Completados hasta ahora: ",completados)
     fmt.Println("Total hasta el momento: %f",total)
 	}
   }()
