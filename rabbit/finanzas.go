@@ -26,6 +26,8 @@ type PaqueteCola struct{
 
 var completados int64
 var total float64
+var ganaciasglobal float64
+var perdidatotal float64
 var registros2 [][]string
 
 //------------funcion para calcular el total de entregas compeltadas----------------
@@ -44,20 +46,29 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
 
 	if paquete.Tipo == "normal"{
 		if paquete.Estado == 3{
-			ganancia = 0
+      ganancia = 0
+      ganaciasglobal += 0
+      perdidatotal += (intentos-1)*10
 		}else{
-			ganancia = valor-((intentos-1)*10)
+      ganancia = valor-((intentos-1)*10)
+      ganaciasglobal += valor
+      perdidatotal += ((intentos-1)*10)
 		}
 	}else if paquete.Tipo == "prioritario"{
 		if paquete.Estado == 3{
-			ganancia = 0.3*valor-((intentos-1)*10)
+      ganancia = 0.3*valor-((intentos-1)*10)
+      ganaciasglobal += 0.3*valor
+      perdidatotal += ((intentos-1)*10)
 		}else{
-			ganancia = valor-((intentos-1)*10)
+      ganancia = valor-((intentos-1)*10)
+      ganaciasglobal += valor
+      perdidatotal += ((intentos-1)*10)
 		}
 	}else if paquete.Tipo == "retail"{
-		ganancia = valor-((intentos-1)*10)
+    ganancia = valor-((intentos-1)*10)
+    ganaciasglobal += valor
+    perdidatotal += ((intentos-1)*10)
 	}
-	fmt.Println("tengo esto de ganancia: %v",ganancia)
   total += ganancia
   return ganancia
 }
@@ -133,6 +144,8 @@ msgs, err := ch.Consume(
     strWrite := registros2
     csvWriter.WriteAll(strWrite)
 	  csvWriter.Flush()
+    fmt.Println("Ganancia hasta el momento: %f",ganaciasglobal)
+    fmt.Println("Perdida hasta el momento: %f",perdidatotal)
     fmt.Println("Total hasta el momento: %f",total)
 	}
   }()
