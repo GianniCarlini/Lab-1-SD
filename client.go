@@ -40,10 +40,9 @@ var nseguimiento map[string]int64
 func main() {
 	fmt.Println("Bienvenido querido cliente")
  //--------------------------------definicion del tiempo entre paquetes-------------------------
-	sleeptime, err := strconv.Atoi(os.Args[1])
-	if err != nil {
-		log.Printf("..............", err)
-	}
+	fmt.Println("Ingrese el tiempo de envio entre paquetes:")
+	var sleeptime int
+	fmt.Scanln(&sleeptime)
  //----------------------------------------------------------------------------------------------
 	nseguimiento = make(map[string]int64) //variable que contiene el id del producto y su respectivo id de seguimiento
  //------------------------------ grpc ----------------------------------------------------------

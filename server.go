@@ -10,10 +10,11 @@ import (
 	"reflect"
 	"os"
 	"encoding/csv"
+
+/*
 	"encoding/json"
-
 	"github.com/streadway/amqp"
-
+*/
 	pb "github.com/GianniCarlini/Lab-1-SD/chat"
 	"google.golang.org/grpc"
 )
@@ -219,7 +220,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 							}
 						}
 					}
-						Rabbit(paquete)
+						//Rabbit(paquete)
 						finanzas = append(finanzas,paquete)
 					}
 				}
@@ -324,7 +325,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func Rabbit(p PaqueteCola){
+/*func Rabbit(p PaqueteCola){
 	conn, err := amqp.Dial("amqp://mqadmin:mqadminpassword@10.10.28.7:5672/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()		
@@ -358,7 +359,7 @@ func Rabbit(p PaqueteCola){
 
 		fmt.Println("Successfully Published Message to Queue")
 }
-
+*/
 func main() {
 	fmt.Println("Bienvenido al servidor de logistica de PrestigioExpress")
 	lis, err := net.Listen("tcp", port)

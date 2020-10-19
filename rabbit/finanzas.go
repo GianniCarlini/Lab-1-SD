@@ -98,13 +98,10 @@ msgs, err := ch.Consume(
   
   go func() {
 	for d := range msgs {
-    log.Printf("Received a message: %s", d.Body)
+    log.Printf("Received a message")
 
     var m PaqueteCola 
     _ = json.Unmarshal(d.Body, &m) //hago el unmarshal y asigno lo que me llego a una variable m axiliar
-
-
-    fmt.Println(m)
 
     CalculoCompletados(m)
     var ganancia float64
@@ -135,7 +132,7 @@ msgs, err := ch.Consume(
     strWrite := registros2
     csvWriter.WriteAll(strWrite)
 	  csvWriter.Flush()
-    fmt.Println(total)
+    fmt.Println("Total hasta el momento: %f",total)
 	}
   }()
   log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
