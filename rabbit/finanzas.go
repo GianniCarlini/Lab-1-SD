@@ -47,26 +47,26 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
 
 	if paquete.Tipo == "normal"{
 		if paquete.Estado == 3{
-      ganancia = 0
+      ganancia += 0
       ganaciasglobal += 0
       perdidatotal += (intentos-1)*10
 		}else{
-      ganancia = valor-((intentos-1)*10)
+      ganancia = valor+((intentos-1)*10)
       ganaciasglobal += valor
       perdidatotal += ((intentos-1)*10)
 		}
 	}else if paquete.Tipo == "prioritario"{
 		if paquete.Estado == 3{
-      ganancia = 0.3*valor-((intentos-1)*10)
+      ganancia = 0.3*valor+((intentos-1)*10)
       ganaciasglobal += 0.3*valor
       perdidatotal += ((intentos-1)*10)
 		}else{
-      ganancia = valor-((intentos-1)*10)
+      ganancia = valor+((intentos-1)*10)
       ganaciasglobal += valor
       perdidatotal += ((intentos-1)*10)
 		}
 	}else if paquete.Tipo == "retail"{
-    ganancia = valor-((intentos-1)*10)
+    ganancia = valor+((intentos-1)*10)
     ganaciasglobal += valor
     perdidatotal += ((intentos-1)*10)
 	}
