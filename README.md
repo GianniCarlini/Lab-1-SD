@@ -24,6 +24,8 @@ El sistema cliente tiene 3 opciones default las primeras 2 son de comportamiento
 
 El sistema camion tiene la opcion al inicio de inciar el tiempo.
 
+Finanzas se termina con CTRL+C al igual que los demas servicios.
+
 El sistema se basa en que el servidor de logistica toma peticiones del cliente y las envia a colas para ser pasadas a camion, luego cuando camion responde con los estados le envia esa informacion a finanzas.
 
 Las maquinas 2 y 4 se les instalo go 1.15 para que los codigos de rabbitmq funcionaran.

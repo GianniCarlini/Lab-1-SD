@@ -74,10 +74,12 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
   return ganancia
 }
 func cleanup() {
-  fmt.Println("Ganancia hasta el momento: %f",ganaciasglobal)
-  fmt.Println("Perdida hasta el momento: %f",perdidatotal)
+  fmt.Println("--------------------------------------------")
+  fmt.Println("Ganancia hasta el momento: ",ganaciasglobal)
+  fmt.Println("Perdida hasta el momento: ",perdidatotal)
   fmt.Println("Completados hasta ahora: ",completados)
-  fmt.Println("Total hasta el momento: %f",total)
+  fmt.Println("Total hasta el momento: ",total)
+  fmt.Println("--------------------------------------------")
 }
 
 
