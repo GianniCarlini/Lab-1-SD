@@ -175,7 +175,7 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 		}
 		// aca va logica si el paquete es nulo continuo sino borro las colas
 		if r.Estado != int64(-9999){ //si el paquete que envia camiones no es "fantasma" o estado -9999 realizo el borrado
-			fmt.Println("Paquetes recividos!")
+			fmt.Println("Paquetes recibidos!")
 			//maximo 6 paquetes
 			entrega[contador] = PaqueteCola{
 				IdPaquete: r.IdPaquete,   
