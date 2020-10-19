@@ -351,22 +351,22 @@ func Rabbit(){
 		Intentos:1,
 		Estado:2,
 		}
+	for _,p := range finanzas{
+		body, _ := json.Marshal(p)
 
+		err = ch.Publish(
+			"",     // exchange
+			q.Name, // routing key
+			false,  // mandatory
+			false,  // immediate
+			amqp.Publishing {
+			  ContentType: "application/json",
+			  Body:        []byte(body),
+			})
+		failOnError(err, "Failed to publish a message")
 
-	body, _ := json.Marshal(aux)
-
-	err = ch.Publish(
-		"",     // exchange
-		q.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
-		amqp.Publishing {
-		  ContentType: "application/json",
-		  Body:        []byte(body),
-		})
-	failOnError(err, "Failed to publish a message")
-
-	fmt.Println("Successfully Published Message to Queue")
+		fmt.Println("Successfully Published Message to Queue")
+	}
 }
 
 func main() {
