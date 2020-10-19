@@ -64,7 +64,7 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
 
 
 func main(){
-  defer Println(total)
+defer fmt.Println(total)
 //-----------------conexion de rabbit----------------------------------
 conn, err := amqp.Dial("amqp://mqadmin:mqadminpassword@localhost:5672/")
 failOnError(err, "Failed to connect to RabbitMQ")
