@@ -16,13 +16,13 @@ Máquina 2 (10.10.28.68) - logistica
 Máquina 3 (10.10.28.69) - camiones
 Máquina 4 (10.10.28.7)  - finanzas
 
-Primero se debe inciar el servidor de logistica en la maquina 2 con el comando make logistica o en caso de no funcionar "go run server.go", una ves iniciado se puede proceder a iniciar el cliente con make cliente en la maquina 1 o en su defecto si falla "go run client.go", a su ves se puede iniciar camiones aunque sus ordener empezaran a enviarce solo si hay peticiones del cliente.
+Primero se debe inciar el servidor de logistica en la maquina 2 con el comando make logistica o en caso de no funcionar "go run server.go", una ves iniciado se puede proceder a iniciar el cliente con make cliente en la maquina 1 o en su defecto si falla "go run client.go", a su ves se puede iniciar camiones con amke camion o en su defecto "go run camiones.go" aunque sus ordenes empezaran a enviarce solo si hay peticiones del cliente.
 
-Finanzas al ser asincronico le llegaran las peticiones y al iniciar el codigo make finanza se inciara el sistema si llega a fallar el make "go run finanzas.go" desde la carpeta rabbit empezara a hacer los calculos pedidos.
+Finanzas al ser asincronico le llegaran las peticiones y al iniciar el codigo make finanza se inciara el sistema si llega a fallar el make finanza o "go run finanzas.go" desde la carpeta rabbit empezara a hacer los calculos pedidos.
 
 El sistema cliente tiene 3 opciones default las primeras 2 son de comportamiento con los archivos de ejemplo fijos y la 3ra es para enviar un codigo de seguimiento, este codigo de seguimiento es por teclado y solo un numero.
 
-El sistema camion tiene la opcion al inicio de inciar el tiempo.
+El sistema camion tiene la opcion al inicio de inciar el tiempo y debe ser solo un numero que equivale a segundos.
 
 Finanzas se termina con CTRL+C al igual que los demas servicios.
 
