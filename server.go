@@ -191,7 +191,6 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 				retail := "retail"
 				// borrado en los registros de colas de entregas completadas
 				for _,paquete := range entrega{
-					fmt.Println(paquete) //-------------------------no olvidar borrar------------------------------
 					if reflect.DeepEqual(paquete,PaqueteCola{Estado:1}){ //reviso si estado es 1 "en camino" para no tener errores
 						continue
 					}else{
@@ -220,7 +219,8 @@ func (s *server) SendPacket(ctx context.Context, in *pb.PacketRequest) (*pb.Pack
 							}
 						}
 					}
-					finanzas = append(finanzas,paquete)
+						Rabbit(paquete)
+						finanzas = append(finanzas,paquete)
 					}
 				}
 				contador = 0
@@ -342,7 +342,7 @@ func Rabbit(){
 		nil,     // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
-	for _,p := range finanzas{
+
 		body, _ := json.Marshal(p)
 
 		err = ch.Publish(
@@ -357,7 +357,6 @@ func Rabbit(){
 		failOnError(err, "Failed to publish a message")
 
 		fmt.Println("Successfully Published Message to Queue")
-	}
 }
 
 func main() {
@@ -370,7 +369,6 @@ func main() {
 
 	s := grpc.NewServer()
 
-	Rabbit()
 	pb.RegisterPacketServer(s, &server{})
 
 	if err := s.Serve(lis); err != nil {
