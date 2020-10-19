@@ -110,7 +110,7 @@ msgs, err := ch.Consume(
     var ganancia float64
     ganancia = GananciaPaquete(m)
 
-    gana := strconv.ParseFloat(ganancia, 32)
+    gana := strconv.FormatFloat(ganancia, 'f', -1, 64)
     
     var estadito string
     if m.Estado == 2{
