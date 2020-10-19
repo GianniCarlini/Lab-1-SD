@@ -71,10 +71,22 @@ func GananciaPaquete(paquete PaqueteCola)(float64){
   total += ganancia
   return ganancia
 }
+func cleanup() {
+  fmt.Println("Ganancia hasta el momento: %f",ganaciasglobal)
+  fmt.Println("Perdida hasta el momento: %f",perdidatotal)
+  fmt.Println("Completados hasta ahora: ",completados)
+  fmt.Println("Total hasta el momento: %f",total)
+}
 
 
 func main(){
-defer fmt.Println(total)
+  c := make(chan os.Signal)
+  signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+  go func() {
+      <-c
+      cleanup()
+      os.Exit(1)
+  }()
 //-----------------conexion de rabbit----------------------------------
 conn, err := amqp.Dial("amqp://mqadmin:mqadminpassword@localhost:5672/")
 failOnError(err, "Failed to connect to RabbitMQ")
@@ -143,10 +155,6 @@ msgs, err := ch.Consume(
     strWrite := registros2
     csvWriter.WriteAll(strWrite)
 	  csvWriter.Flush()
-    fmt.Println("Ganancia hasta el momento: %f",ganaciasglobal)
-    fmt.Println("Perdida hasta el momento: %f",perdidatotal)
-    fmt.Println("Completados hasta ahora: ",completados)
-    fmt.Println("Total hasta el momento: %f",total)
 	}
   }()
   log.Printf(" [*] Waiting for messages. To exit press CTRL+C")
