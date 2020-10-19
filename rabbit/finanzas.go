@@ -8,6 +8,8 @@ import (
   "os"
   "strconv"
   "encoding/csv"
+  "os/signal"
+  "syscall"
 )
 
 func failOnError(err error, msg string) {
